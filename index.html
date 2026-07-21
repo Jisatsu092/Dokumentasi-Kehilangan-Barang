@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lost and Found Kampus - Panduan Belajar Laravel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16181d; --ink-soft:#525862; --paper:#eff0ea; --card:#fdfdfb;
+  --rule:#c6c8bf; --rule-soft:#dcded5; --stamp:#5b3fa8; --stamp-tint:#ece5fb;
+  --code-bg:#1a1c22; --code-ink:#d7dae3;
+  --serif:"Source Serif 4",Georgia,serif;
+  --cond:"IBM Plex Sans Condensed",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:132px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16.5px;line-height:1.72;
+ background-image:linear-gradient(var(--rule-soft) 1px,transparent 1px);background-size:100% 34px;background-attachment:fixed}
+
+.kop{background:var(--paper);border-bottom:4px double var(--ink);position:sticky;top:0;z-index:40}
+.kop-top{max-width:1180px;margin:0 auto;padding:12px 24px 0;display:flex;align-items:baseline;gap:16px}
+.kop h1{font-family:var(--cond);font-weight:700;text-transform:uppercase;letter-spacing:.14em;
+ font-size:clamp(14px,2.2vw,18px);margin:0}
+.kop .no{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);margin-left:auto;white-space:nowrap}
+.tabs{max-width:1180px;margin:0 auto;padding:8px 24px 0;display:flex;gap:4px;overflow-x:auto}
+.tab{font-family:var(--cond);background:none;border:0;border-bottom:3px solid transparent;cursor:pointer;
+ padding:8px 14px 9px;color:var(--ink-soft);display:flex;gap:8px;align-items:baseline;white-space:nowrap;
+ text-transform:uppercase;letter-spacing:.09em;font-size:12.5px;font-weight:600;transition:.15s}
+.tab .tab-n{font-family:var(--mono);font-size:10px;opacity:.5;letter-spacing:0}
+.tab:hover{color:var(--ink)}
+.tab.on{color:var(--stamp);border-bottom-color:var(--stamp)}
+.tab.on .tab-n{opacity:1}
+.menu{display:none;font-family:var(--cond);text-transform:uppercase;letter-spacing:.1em;font-size:11px;
+ background:none;border:1px solid var(--ink);padding:4px 9px;cursor:pointer;color:var(--ink)}
+
+.shell{max-width:1180px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:250px 1fr;gap:56px;align-items:start}
+nav.toc{position:sticky;top:132px;padding:30px 0 60px;max-height:calc(100vh - 150px);overflow-y:auto}
+.toc-group{display:none}
+.toc-group.on{display:block}
+nav.toc .lbl{font-family:var(--cond);text-transform:uppercase;letter-spacing:.16em;font-size:10.5px;
+ color:var(--ink-soft);border-bottom:1px solid var(--rule);padding-bottom:7px;margin-bottom:12px;display:block}
+nav.toc a{display:flex;gap:10px;text-decoration:none;color:var(--ink-soft);font-family:var(--cond);
+ font-size:13.5px;line-height:1.35;padding:5px 8px 5px 10px;border-left:2px solid transparent;transition:.15s}
+nav.toc a .tn{font-family:var(--mono);font-size:10.5px;opacity:.55;padding-top:2px}
+nav.toc a:hover{color:var(--ink)}
+nav.toc a.on{color:var(--stamp);border-left-color:var(--stamp);font-weight:600}
+
+main{padding:30px 0 140px;min-width:0;max-width:800px}
+.panel{display:none}
+.panel.on{display:block}
+
+.hero{border-bottom:1px solid var(--rule);padding-bottom:26px}
+.hero .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--stamp);text-transform:uppercase}
+.hero h2{font-family:var(--cond);font-weight:700;font-size:clamp(28px,5vw,44px);line-height:1.06;
+ text-transform:uppercase;margin:12px 0 14px}
+.hero p{margin:0;max-width:58ch;color:var(--ink-soft)}
+
+.bab{padding-top:48px}
+.bab h2{font-family:var(--cond);text-transform:uppercase;font-weight:700;letter-spacing:.02em;
+ font-size:clamp(20px,3vw,26px);line-height:1.15;margin:0 0 20px;padding-bottom:11px;
+ border-bottom:3px double var(--ink);display:flex;gap:14px;align-items:baseline}
+.bab-num{font-family:var(--mono);font-size:13px;color:var(--stamp);font-weight:700}
+h3{font-family:var(--cond);text-transform:uppercase;letter-spacing:.08em;font-size:14px;margin:32px 0 10px}
+p{margin:0 0 15px}
+a{color:var(--stamp)}
+strong{font-weight:600}
+ul,ol{padding-left:22px;margin:0 0 16px}
+li{margin-bottom:6px}
+li::marker{color:var(--ink-soft);font-family:var(--mono);font-size:.85em}
+:not(pre)>code{font-family:var(--mono);font-size:.82em;background:var(--card);border:1px solid var(--rule-soft);
+ padding:1px 5px;border-radius:2px;word-break:break-word}
+
+.codeblock{position:relative;margin:0 0 20px;background:var(--code-bg);border-radius:3px;overflow:hidden}
+.codelang{position:absolute;top:0;right:0;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+ text-transform:uppercase;color:#7c828f;padding:6px 10px;user-select:none}
+pre{margin:0;padding:18px 20px;overflow-x:auto}
+pre code{font-family:var(--mono);font-size:12.8px;line-height:1.7;color:var(--code-ink);background:none;border:0;padding:0}
+.hljs-keyword,.hljs-meta{color:#c4a2ff}
+.hljs-string,.hljs-attr{color:#9fd18a}
+.hljs-title,.hljs-name{color:#8fc4f5}
+.hljs-comment{color:#6b7280;font-style:italic}
+.hljs-number,.hljs-literal{color:#f0b672}
+.hljs-variable,.hljs-template-variable{color:#e8dcff}
+.hljs-tag{color:#8fa8c9}
+
+.latihan{position:relative;border:1px solid var(--stamp);background:var(--stamp-tint);
+ padding:20px 22px 6px;margin:0 0 22px;border-radius:2px}
+.latihan-stamp{position:absolute;top:-11px;left:16px;background:var(--stamp);color:#fff;
+ font-family:var(--cond);font-weight:700;text-transform:uppercase;letter-spacing:.2em;font-size:10px;
+ padding:3px 10px;transform:rotate(-1.2deg);box-shadow:1px 1px 0 rgba(91,63,168,.35)}
+.latihan p:first-of-type{margin-top:0}
+.latihan :not(pre)>code{background:#fff}
+
+.note{margin:0 0 20px;padding:2px 0 2px 18px;border-left:3px solid var(--rule);color:var(--ink-soft);font-size:15.5px}
+.note p{margin:0 0 8px}
+.note p:last-child{margin:0}
+
+table{width:100%;border-collapse:collapse;margin:0 0 22px;background:var(--card);font-size:14.5px}
+th{font-family:var(--cond);text-transform:uppercase;letter-spacing:.1em;font-size:10.5px;text-align:left;
+ border-bottom:2px solid var(--ink);padding:9px 12px}
+td{border-bottom:1px solid var(--rule-soft);padding:9px 12px;vertical-align:top}
+tr:last-child td{border-bottom:0}
+
+li.check{list-style:none;display:flex;gap:10px;align-items:flex-start;margin-left:-22px}
+li.check input{margin-top:6px;accent-color:var(--stamp);width:15px;height:15px;flex:none}
+li.check input:checked+span{text-decoration:line-through;color:var(--ink-soft)}
+
+hr{border:0;border-top:1px solid var(--rule);margin:44px 0}
+a:focus-visible,input:focus-visible,button:focus-visible{outline:2px solid var(--stamp);outline-offset:3px}
+footer{border-top:4px double var(--ink);margin-top:70px;padding:22px 0 0;font-family:var(--mono);
+ font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media(max-width:900px){
+  .shell{grid-template-columns:1fr;gap:0;padding:0 18px}
+  .menu{display:block}
+  html{scroll-padding-top:120px}
+  nav.toc{position:static;max-height:none;padding:16px 0;border-bottom:1px solid var(--rule);display:none}
+  nav.toc.open{display:block}
+  main{padding-top:22px}
+  .tabs{padding-bottom:2px}
+}
+</style>
+</head>
+<body>
+<header class="kop">
+  <div class="kop-top">
+    <h1>Lost and Found Kampus</h1>
+    <button class="menu" id="menuBtn" aria-expanded="false">Daftar Isi</button>
+    <span class="no">Laravel 13 &middot; Blade &middot; MySQL</span>
+  </div>
+  <div class="tabs" id="tabs"><button class="tab" data-track="trek-0"><span class="tab-n">01</span><span class="tab-t">Level 1</span></button><button class="tab" data-track="trek-1"><span class="tab-n">02</span><span class="tab-t">Level 2</span></button><button class="tab" data-track="trek-2"><span class="tab-n">03</span><span class="tab-t">Git &amp; GitHub</span></button></div>
+</header>
+
+<div class="shell">
+  <nav class="toc" id="toc"><div class="toc-group" data-track="trek-0"><span class="lbl">Level 1</span><a href="#trek-0-bab-00" data-target="trek-0-bab-00"><span class="tn">00</span>Apa itu Laravel, dan apa yang mau kita bikin</a><a href="#trek-0-bab-01" data-target="trek-0-bab-01"><span class="tn">01</span>Install tools</a><a href="#trek-0-bab-02" data-target="trek-0-bab-02"><span class="tn">02</span>Bikin project pertama</a><a href="#trek-0-bab-03" data-target="trek-0-bab-03"><span class="tn">03</span>Route dan View</a><a href="#trek-0-bab-04" data-target="trek-0-bab-04"><span class="tn">04</span>Login dan register instan pakai Breeze</a><a href="#trek-0-bab-05" data-target="trek-0-bab-05"><span class="tn">05</span>Database dan migration</a><a href="#trek-0-bab-06" data-target="trek-0-bab-06"><span class="tn">06</span>Model</a><a href="#trek-0-bab-07" data-target="trek-0-bab-07"><span class="tn">07</span>Kategori barang</a><a href="#trek-0-bab-08" data-target="trek-0-bab-08"><span class="tn">08</span>Siapin tempat penyimpanan foto</a><a href="#trek-0-bab-09" data-target="trek-0-bab-09"><span class="tn">09</span>Controller dan upload foto</a><a href="#trek-0-bab-10" data-target="trek-0-bab-10"><span class="tn">10</span>View form laporan</a><a href="#trek-0-bab-11" data-target="trek-0-bab-11"><span class="tn">11</span>View daftar laporan</a><a href="#trek-0-bab-12" data-target="trek-0-bab-12"><span class="tn">12</span>Menu navigasi</a><a href="#trek-0-bab-13" data-target="trek-0-bab-13"><span class="tn">13</span>Kalau error</a><a href="#trek-0-bab-14" data-target="trek-0-bab-14"><span class="tn">14</span>Checklist Level 1</a></div><div class="toc-group" data-track="trek-1"><span class="lbl">Level 2</span><a href="#trek-1-bab-01" data-target="trek-1-bab-01"><span class="tn">01</span>Apa yang ditambahin</a><a href="#trek-1-bab-02" data-target="trek-1-bab-02"><span class="tn">02</span>Kategori pindah ke database</a><a href="#trek-1-bab-03" data-target="trek-1-bab-03"><span class="tn">03</span>Seeder</a><a href="#trek-1-bab-04" data-target="trek-1-bab-04"><span class="tn">04</span>Banyak foto per laporan</a><a href="#trek-1-bab-05" data-target="trek-1-bab-05"><span class="tn">05</span>Role user</a><a href="#trek-1-bab-06" data-target="trek-1-bab-06"><span class="tn">06</span>Middleware</a><a href="#trek-1-bab-07" data-target="trek-1-bab-07"><span class="tn">07</span>Klaim barang</a><a href="#trek-1-bab-08" data-target="trek-1-bab-08"><span class="tn">08</span>Halaman petugas</a><a href="#trek-1-bab-09" data-target="trek-1-bab-09"><span class="tn">09</span>Checklist Level 2</a><a href="#trek-1-bab-10" data-target="trek-1-bab-10"><span class="tn">10</span>Kalau masih kurang nantang</a></div><div class="toc-group" data-track="trek-2"><span class="lbl">Git &amp; GitHub</span><a href="#trek-2-bab-01" data-target="trek-2-bab-01"><span class="tn">01</span>Kenapa perlu Git</a><a href="#trek-2-bab-02" data-target="trek-2-bab-02"><span class="tn">02</span>Setelan awal</a><a href="#trek-2-bab-03" data-target="trek-2-bab-03"><span class="tn">03</span>Jangan sampai kepush</a><a href="#trek-2-bab-04" data-target="trek-2-bab-04"><span class="tn">04</span>Commit pertama</a><a href="#trek-2-bab-05" data-target="trek-2-bab-05"><span class="tn">05</span>Bikin repo di GitHub dan push</a><a href="#trek-2-bab-06" data-target="trek-2-bab-06"><span class="tn">06</span>Alur harian</a><a href="#trek-2-bab-07" data-target="trek-2-bab-07"><span class="tn">07</span>Branch</a><a href="#trek-2-bab-08" data-target="trek-2-bab-08"><span class="tn">08</span>Perintah darurat</a><a href="#trek-2-bab-09" data-target="trek-2-bab-09"><span class="tn">09</span>Habis clone dari GitHub</a></div></nav>
+  <main id="main"><div class="panel" data-track="trek-0"><div class="hero"><span class="eyebrow">Level 1 · Dasar</span><h2>Mulai dari nol</h2><p>Install tools, kenalan Route-Controller-Model-View, sampai form laporan barang lengkap dengan upload foto.</p></div><section id="trek-0-bab-00" class="bab"><h2><span class="bab-num">00</span><span>Apa itu Laravel, dan apa yang mau kita bikin</span></h2>
+<p>Laravel itu framework PHP. Anggap aja PHP polos itu bahan mentah, Laravel itu dapur yang udah lengkap: kompor, panci, pisau udah disiapin. Lo tinggal masak.</p>
+<p>Yang dibikin di Level 1: website Lost and Found kampus. Dua arah:</p>
+<ul>
+<li>Orang yang <strong>kehilangan</strong> barang bikin laporan: barangnya apa, hilang di mana, kapan, ada fotonya nggak</li>
+<li>Orang yang <strong>menemukan</strong> barang juga bikin laporan: barang apa yang dia temuin, ditemukan di mana, sekarang dititipin di mana</li>
+</ul>
+<p>Dua-duanya masuk ke satu daftar yang bisa dicari semua orang.</p>
+<div class="codeblock"><span class="codelang">plaintext</span><pre><code class="language-plaintext">User login -&gt; pilih Kehilangan atau Menemukan -&gt; isi detail + upload foto
+                                                        |
+                                        data masuk database -&gt; muncul di daftar publik
+</code></pre></div>
+<p>Level 1 belum ada admin, belum ada klaim, belum ada verifikasi. Itu Level 2.</p>
+<p>Empat istilah yang harus lo hafal duluan:</p>
+<table>
+<thead>
+<tr>
+<th>Istilah</th>
+<th>Tugasnya</th>
+<th>Analogi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Route</td>
+<td>nentuin URL apa manggil apa</td>
+<td>alamat rumah</td>
+</tr>
+<tr>
+<td>Controller</td>
+<td>otak, ngatur logika</td>
+<td>resepsionis</td>
+</tr>
+<tr>
+<td>Model</td>
+<td>wakil satu tabel database</td>
+<td>pegawai arsip</td>
+</tr>
+<tr>
+<td>View</td>
+<td>tampilan yang dilihat user</td>
+<td>ruang tamu</td>
+</tr>
+</tbody>
+</table>
+<p>Alurnya selalu <strong>Route -&gt; Controller -&gt; Model -&gt; View</strong>. Sekali lo paham empat kotak ini, sisanya cuma variasi.</p>
+</section><section id="trek-0-bab-01" class="bab"><h2><span class="bab-num">01</span><span>Install tools</span></h2>
+<p>Install berurutan, jangan diloncat. Semua gratis.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Kegunaan</th>
+<th>Download</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Laragon</td>
+<td>paket PHP + MySQL + Apache sekaligus</td>
+<td><a href="https://laragon.org/download/">laragon.org/download</a></td>
+</tr>
+<tr>
+<td>Composer</td>
+<td>pengunduh library PHP</td>
+<td><a href="https://getcomposer.org/download/">getcomposer.org/download</a></td>
+</tr>
+<tr>
+<td>Node.js LTS</td>
+<td>compile CSS dan JS</td>
+<td><a href="https://nodejs.org/en/download">nodejs.org/en/download</a></td>
+</tr>
+<tr>
+<td>Git for Windows</td>
+<td>version control + Git Bash</td>
+<td><a href="https://git-scm.com/downloads/win">git-scm.com/downloads/win</a></td>
+</tr>
+<tr>
+<td>VS Code</td>
+<td>editor kode</td>
+<td><a href="https://code.visualstudio.com/download">code.visualstudio.com/download</a></td>
+</tr>
+<tr>
+<td>Akun GitHub</td>
+<td>tempat nyimpen kode online</td>
+<td><a href="https://github.com/signup">github.com/signup</a></td>
+</tr>
+</tbody>
+</table>
+<p>Urutan install: Laragon dulu, terus Composer, Node, Git, terakhir VS Code.</p>
+<p>Waktu install Git for Windows, semua pilihan <strong>Next</strong> aja, kecuali satu: pas ditanya default editor, pilih <strong>Visual Studio Code</strong>. Git Bash otomatis ikut keinstall, itu terminal yang bakal kita pakai terus.</p>
+<p>Selesai install, buka <strong>Git Bash</strong> (klik kanan di desktop, pilih Open Git Bash Here) terus ketik satu-satu:</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php -v
+composer -V
+node -v
+npm -v
+git --version
+</code></pre></div>
+<p>Kelima-limanya harus keluar nomor versi. Kalau ada yang <code>command not found</code>, tutup Git Bash, buka lagi. Masih error? Berarti tool itu belum masuk PATH, install ulang dan centang opsi "Add to PATH".</p>
+<p>PHP harus versi <strong>8.3 ke atas</strong>. Kalau Laragon lo bawa PHP lama, download yang baru dari <a href="https://windows.php.net/download/">windows.php.net/download</a> terus taro di folder <code>laragon/bin/php/</code>.</p>
+<p>Karena project ini banyak main foto, cek juga extension GD-nya nyala:</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php -m | grep -i gd
+</code></pre></div>
+<p>Kalau <code>gd</code> nggak keluar, buka <code>php.ini</code> di folder PHP lo, cari baris <code>;extension=gd</code>, hapus titik komanya, simpan, restart Laragon.</p>
+<p>Extension VS Code yang dipasang: <strong>Laravel Extension Pack</strong>, <strong>PHP Intelephense</strong>, <strong>Laravel Blade Snippets</strong>.</p>
+</section><section id="trek-0-bab-02" class="bab"><h2><span class="bab-num">02</span><span>Bikin project pertama</span></h2>
+<p>Buka Git Bash, masuk ke folder tempat nyimpen project:</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">cd /c/laragon/www
+composer create-project laravel/laravel barang-hilang
+cd barang-hilang
+</code></pre></div>
+<p>Tunggu, ini agak lama. Composer lagi download ratusan file. Kalau installer nanya starter kit, pilih <strong>None</strong>.</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan serve
+</code></pre></div>
+<p>Buka <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a>. Muncul halaman welcome Laravel? Sukses.</p>
+<p>Buka foldernya di VS Code: <code>code .</code> (titiknya jangan lupa).</p>
+<p>Folder yang bakal sering lo sentuh cuma ini:</p>
+<div class="codeblock"><span class="codelang">plaintext</span><pre><code class="language-plaintext">barang-hilang/
+├── app/Http/Controllers/    &lt;- otak aplikasi
+├── app/Models/              &lt;- wakil tabel database
+├── database/migrations/     &lt;- cetak biru tabel
+├── resources/views/         &lt;- tampilan (file .blade.php)
+├── routes/web.php           &lt;- daftar URL
+├── storage/app/public/      &lt;- tempat foto yang diupload nanti
+└── .env                     &lt;- setelan rahasia (password db, dll)
+</code></pre></div>
+<p>Sisanya abaikan dulu.</p>
+</section><section id="trek-0-bab-03" class="bab"><h2><span class="bab-num">03</span><span>Route dan View</span></h2>
+<p>Ini kotak paling gampang. Buka <code>routes/web.php</code>, tambahin:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">Route::get('/tentang', function () {
+    return view('pages.tentang.index');
+});
+</code></pre></div>
+<p>Artinya: kalau ada yang buka <code>/tentang</code>, tampilin view <code>pages/tentang/index</code>.</p>
+<p>Semua halaman kita simpen di <code>resources/views/pages/&lt;namahalaman&gt;/</code>. Ini bukan aturan Laravel, ini kesepakatan kita biar rapi.</p>
+<p>Bikin file <code>resources/views/pages/tentang/index.blade.php</code>:</p>
+<div class="codeblock"><span class="codelang">xml</span><pre><code class="language-xml">&lt;!DOCTYPE html&gt;
+&lt;html lang="id"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;Tentang&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Lost and Found Kampus&lt;/h1&gt;
+    &lt;p&gt;Tempat lapor barang hilang dan barang temuan.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre></div>
+<p>Buka <a href="http://127.0.0.1:8000/tentang">http://127.0.0.1:8000/tentang</a>. Jadi.</p>
+<p><code>.blade.php</code> itu HTML biasa plus bumbu. Yang paling sering dipakai:</p>
+<div class="codeblock"><span class="codelang">xml</span><pre><code class="language-xml">{{ $nama }}                        {{-- nampilin variabel --}}
+@if ($status === 'open') ... @endif
+@foreach ($items as $item) ... @endforeach
+</code></pre></div>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - bikin halaman <code>/panduan</code> dengan cara yang sama, isinya aturan main pelaporan. View-nya di <code>pages/panduan/index.blade.php</code>.</p></div>
+</section><section id="trek-0-bab-04" class="bab"><h2><span class="bab-num">04</span><span>Login dan register instan pakai Breeze</span></h2>
+<p>Nulis sistem login dari nol itu ribet dan gampang bocor. Laravel udah nyediain paketnya, namanya Breeze.</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">composer require laravel/breeze --dev
+php artisan breeze:install blade
+</code></pre></div>
+<p>Pas ditanya testing framework pilih <strong>Pest</strong>, pas ditanya dark mode pilih <strong>No</strong>.</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">npm install
+npm run dev
+</code></pre></div>
+<p>Buka Git Bash <strong>kedua</strong> (jangan matiin yang tadi), jalanin <code>php artisan serve</code> di situ.</p>
+<p>Sekarang lo punya gratisan: register, login, lupa password, edit profil, plus navbar. Coba daftar akun.</p>
+<blockquote class="note">
+<p>Kenapa dua terminal? <code>npm run dev</code> itu Vite, tugasnya compile CSS/JS tiap file berubah. <code>php artisan serve</code> itu server PHP-nya. Keduanya harus nyala bareng selama ngoding. Kalau tampilan tiba-tiba polos tanpa warna, biasanya Vite-nya mati.</p>
+</blockquote>
+<p>Breeze juga ngasih layout siap pakai. Mulai sekarang view kita nggak nulis <code>&lt;html&gt;</code> lagi, tapi gini:</p>
+<div class="codeblock"><span class="codelang">xml</span><pre><code class="language-xml">&lt;x-app-layout&gt;
+    &lt;x-slot name="header"&gt;
+        &lt;h2 class="text-xl font-semibold text-gray-800"&gt;Judul Halaman&lt;/h2&gt;
+    &lt;/x-slot&gt;
+
+    &lt;div class="py-12"&gt;
+        isi halaman di sini
+    &lt;/div&gt;
+&lt;/x-app-layout&gt;
+</code></pre></div>
+</section><section id="trek-0-bab-05" class="bab"><h2><span class="bab-num">05</span><span>Database dan migration</span></h2>
+<p>Buka Laragon, klik <strong>Start All</strong>. Klik tombol <strong>Database</strong>, bikin database baru namanya <code>barang_hilang</code>.</p>
+<p>Edit file <code>.env</code>:</p>
+<div class="codeblock"><span class="codelang">ini</span><pre><code class="language-ini">DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=barang_hilang
+DB_USERNAME=root
+DB_PASSWORD=
+</code></pre></div>
+<p>Tes: <code>php artisan migrate</code>. Muncul daftar tabel yang dibikin? Nyambung.</p>
+<p>Migration itu cetak biru tabel dalam bentuk kode. Kenapa nggak bikin manual di phpMyAdmin? Karena kalau kodenya, temen lo tinggal <code>php artisan migrate</code> dan dapet struktur yang persis sama.</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan make:model ItemReport -m
+</code></pre></div>
+<p><code>-m</code> artinya sekalian bikin migration. Buka file baru di <code>database/migrations/</code>, isi <code>up()</code>:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">public function up(): void
+{
+    Schema::create('item_reports', function (Blueprint $table) {
+        $table-&gt;id();
+        $table-&gt;foreignId('user_id')-&gt;constrained()-&gt;cascadeOnDelete();
+        $table-&gt;string('report_type');
+        $table-&gt;string('category');
+        $table-&gt;string('item_name');
+        $table-&gt;text('description');
+        $table-&gt;string('color', 50)-&gt;nullable();
+        $table-&gt;string('brand', 100)-&gt;nullable();
+        $table-&gt;string('location');
+        $table-&gt;date('event_date');
+        $table-&gt;string('storage_place')-&gt;nullable();
+        $table-&gt;string('contact');
+        $table-&gt;string('photo_path')-&gt;nullable();
+        $table-&gt;string('status')-&gt;default('open');
+        $table-&gt;timestamps();
+    });
+}
+</code></pre></div>
+<p>Jalanin <code>php artisan migrate</code> lagi. Cek di phpMyAdmin, tabelnya ada.</p>
+<p>Arti kolom yang penting:</p>
+<ul>
+<li><code>report_type</code> isinya <code>hilang</code> atau <code>ditemukan</code>. Satu tabel dipakai buat dua jenis laporan, biar nggak perlu bikin dua tabel yang isinya mirip.</li>
+<li><code>location</code> artinya beda tergantung jenis laporan: kalau <code>hilang</code>, ini tempat terakhir kali barangnya kelihatan. Kalau <code>ditemukan</code>, ini tempat barangnya ketemu.</li>
+<li><code>storage_place</code> cuma dipakai laporan <code>ditemukan</code>: sekarang barangnya dititipin di mana, misal "Pos Satpam Gedung B". Makanya <code>nullable()</code>.</li>
+<li><code>photo_path</code> cuma nyimpen <strong>alamat</strong> filenya, contoh <code>items/abc123.jpg</code>. Fotonya sendiri disimpen di folder, bukan di database.</li>
+<li><code>status</code> default <code>open</code>, nanti bisa berubah jadi <code>returned</code> kalau barangnya udah balik ke pemiliknya.</li>
+</ul>
+<blockquote class="note">
+<p>Nama kolom database pakai <code>snake_case</code> (huruf kecil, pisah underscore). Ini wajib, karena Laravel nyarinya format itu.</p>
+</blockquote>
+</section><section id="trek-0-bab-06" class="bab"><h2><span class="bab-num">06</span><span>Model</span></h2>
+<p>Model itu wakil satu tabel. Satu tabel, satu model. Nama tabel jamak (<code>item_reports</code>), nama model tunggal (<code>ItemReport</code>).</p>
+<p><code>app/Models/ItemReport.php</code>:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">&lt;?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class ItemReport extends Model
+{
+    protected $fillable = [
+        'user_id', 'report_type', 'category', 'item_name', 'description',
+        'color', 'brand', 'location', 'event_date', 'storage_place',
+        'contact', 'photo_path', 'status',
+    ];
+
+    protected function casts(): array
+    {
+        return ['event_date' =&gt; 'date'];
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this-&gt;belongsTo(User::class);
+    }
+
+    public function photoUrl(): string
+    {
+        return $this-&gt;photo_path
+            ? asset('storage/' . $this-&gt;photo_path)
+            : asset('images/no-photo.png');
+    }
+}
+</code></pre></div>
+<p><code>$fillable</code> itu daftar kolom yang boleh diisi dari form. Kalau lupa masukin satu kolom ke sini, datanya bakal diem-diem nggak kesimpen. Ini error paling sering buat pemula.</p>
+<p><code>photoUrl()</code> itu method bantuan. Daripada nulis <code>asset('storage/' . ...)</code> berulang-ulang di banyak view, cukup panggil <code>$report-&gt;photoUrl()</code>. Kalau fotonya kosong, otomatis nampilin gambar placeholder.</p>
+<p>Tambahin relasi kebalikannya di <code>app/Models/User.php</code>, di dalam class:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">public function itemReports(): \Illuminate\Database\Eloquent\Relations\HasMany
+{
+    return $this-&gt;hasMany(ItemReport::class);
+}
+</code></pre></div>
+<p>Sekarang <code>$user-&gt;itemReports</code> ngasih semua laporan punya user itu. Nggak perlu nulis SQL sama sekali.</p>
+</section><section id="trek-0-bab-07" class="bab"><h2><span class="bab-num">07</span><span>Kategori barang</span></h2>
+<p>Di Level 1, daftar kategori kita simpen di file config aja, belum di database.</p>
+<p>Bikin file baru <code>config/items.php</code>:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">&lt;?php
+
+return [
+    'categories' =&gt; [
+        'elektronik' =&gt; 'Elektronik',
+        'dompet-tas' =&gt; 'Dompet dan Tas',
+        'kartu-dokumen' =&gt; 'Kartu dan Dokumen',
+        'kunci' =&gt; 'Kunci',
+        'pakaian' =&gt; 'Pakaian',
+        'alat-tulis' =&gt; 'Alat Tulis dan Buku',
+        'lainnya' =&gt; 'Lainnya',
+    ],
+    'types' =&gt; [
+        'hilang' =&gt; 'Kehilangan Barang',
+        'ditemukan' =&gt; 'Menemukan Barang',
+    ],
+];
+</code></pre></div>
+<p>Manggilnya dari mana aja: <code>config('items.categories')</code>.</p>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - tambahin 3 kategori lagi yang masuk akal buat kampus. Contoh: perhiasan, botol minum, helm dan perlengkapan motor.</p></div>
+</section><section id="trek-0-bab-08" class="bab"><h2><span class="bab-num">08</span><span>Siapin tempat penyimpanan foto</span></h2>
+<p>Ini bagian yang beda dari project biasa, jadi baca pelan-pelan.</p>
+<p>Foto yang diupload user disimpen di <code>storage/app/public/</code>. Masalahnya, folder <code>storage</code> itu nggak bisa dibuka langsung dari browser demi keamanan. Solusinya, Laravel bikin jalan pintas:</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan storage:link
+</code></pre></div>
+<p>Perintah ini bikin pintu tembus dari <code>public/storage</code> ke <code>storage/app/public</code>. Jalanin <strong>sekali aja</strong> per project.</p>
+<blockquote class="note">
+<p>Di Windows, kalau muncul error soal symlink, tutup Git Bash, klik kanan ikonnya, pilih <strong>Run as administrator</strong>, terus jalanin ulang perintahnya. Alternatif lain, nyalain Developer Mode di Settings Windows.</p>
+</blockquote>
+<p>Cek berhasil: harusnya muncul folder baru <code>public/storage</code>.</p>
+<p>Terakhir, siapin gambar cadangan buat laporan yang nggak ada fotonya. Taro file gambar apa aja, kasih nama <code>no-photo.png</code>, di folder <code>public/images/</code>. Bikin foldernya kalau belum ada.</p>
+<p>Tiga tempat yang gampang ketuker, hafalin bedanya:</p>
+<table>
+<thead>
+<tr>
+<th>Folder</th>
+<th>Isinya</th>
+<th>Boleh dibuka browser</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>public/images/</code></td>
+<td>gambar bawaan aplikasi, misal logo</td>
+<td>ya</td>
+</tr>
+<tr>
+<td><code>storage/app/public/</code></td>
+<td>file yang diupload user</td>
+<td>lewat pintu tembus tadi</td>
+</tr>
+<tr>
+<td><code>storage/app/private/</code></td>
+<td>file rahasia, misal scan KTP</td>
+<td>tidak</td>
+</tr>
+</tbody>
+</table>
+</section><section id="trek-0-bab-09" class="bab"><h2><span class="bab-num">09</span><span>Controller dan upload foto</span></h2>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan make:controller ItemReportController
+</code></pre></div>
+<p>Isi <code>app/Http/Controllers/ItemReportController.php</code> lengkap:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">&lt;?php
+
+namespace App\Http\Controllers;
+
+use App\Models\ItemReport;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
+
+class ItemReportController extends Controller
+{
+    public function index(Request $request): View
+    {
+        $reports = ItemReport::with('user')
+            -&gt;when($request-&gt;type, fn ($query, $type) =&gt; $query-&gt;where('report_type', $type))
+            -&gt;when($request-&gt;q, fn ($query, $q) =&gt; $query-&gt;where('item_name', 'like', "%{$q}%"))
+            -&gt;latest()
+            -&gt;paginate(12)
+            -&gt;withQueryString();
+
+        return view('pages.laporan.index', compact('reports'));
+    }
+
+    public function create(): View
+    {
+        return view('pages.laporan.create', [
+            'categories' =&gt; config('items.categories'),
+            'types' =&gt; config('items.types'),
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $data = $request-&gt;validate([
+            'report_type' =&gt; ['required', 'in:hilang,ditemukan'],
+            'category' =&gt; ['required', 'in:' . implode(',', array_keys(config('items.categories')))],
+            'item_name' =&gt; ['required', 'string', 'max:120'],
+            'description' =&gt; ['required', 'string', 'min:15', 'max:1000'],
+            'color' =&gt; ['nullable', 'string', 'max:50'],
+            'brand' =&gt; ['nullable', 'string', 'max:100'],
+            'location' =&gt; ['required', 'string', 'max:150'],
+            'event_date' =&gt; ['required', 'date', 'before_or_equal:today'],
+            'storage_place' =&gt; ['nullable', 'required_if:report_type,ditemukan', 'string', 'max:150'],
+            'contact' =&gt; ['required', 'string', 'max:100'],
+            'photo' =&gt; ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+        ]);
+
+        if ($request-&gt;hasFile('photo')) {
+            $data['photo_path'] = $request-&gt;file('photo')-&gt;store('items', 'public');
+        }
+
+        $request-&gt;user()-&gt;itemReports()-&gt;create($data);
+
+        return to_route('laporan.index')-&gt;with('success', 'Laporan berhasil dikirim.');
+    }
+
+    public function show(ItemReport $laporan): View
+    {
+        return view('pages.laporan.show', ['report' =&gt; $laporan-&gt;load('user')]);
+    }
+
+    public function destroy(ItemReport $laporan): RedirectResponse
+    {
+        abort_unless($laporan-&gt;user_id === request()-&gt;user()-&gt;id, 403);
+
+        if ($laporan-&gt;photo_path) {
+            Storage::disk('public')-&gt;delete($laporan-&gt;photo_path);
+        }
+
+        $laporan-&gt;delete();
+
+        return to_route('laporan.index')-&gt;with('success', 'Laporan dihapus.');
+    }
+}
+</code></pre></div>
+<p>Yang penting dari kode di atas:</p>
+<ul>
+<li><code>'photo' =&gt; ['nullable','image','mimes:jpg,jpeg,png,webp','max:2048']</code>. <code>image</code> mastiin yang diupload beneran gambar, bukan file <code>.exe</code> yang cuma diganti namanya. <code>max:2048</code> itu <strong>2048 kilobyte</strong>, alias 2 MB. Satuannya KB, bukan MB, sering ketuker.</li>
+<li><code>store('items', 'public')</code> nyimpen file ke <code>storage/app/public/items/</code> dengan nama acak, terus balikin alamatnya. Nama acak itu penting: kalau dua orang upload <code>foto.jpg</code>, nggak saling nimpa.</li>
+<li>Kolomnya di form namanya <code>photo</code>, tapi di database <code>photo_path</code>. Yang disimpen ke database cuma teks alamatnya.</li>
+<li><code>required_if:report_type,ditemukan</code> bikin kolom tempat penitipan wajib diisi cuma kalau laporannya jenis "menemukan".</li>
+<li>Di <code>destroy()</code>, fotonya ikut dihapus. Kalau nggak, filenya jadi sampah yang numpuk selamanya di server.</li>
+</ul>
+<p>Daftarin route di <code>routes/web.php</code>:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">use App\Http\Controllers\ItemReportController;
+
+Route::get('/', [ItemReportController::class, 'index'])-&gt;name('laporan.index');
+Route::get('/laporan/{laporan}', [ItemReportController::class, 'show'])-&gt;name('laporan.show');
+
+Route::middleware('auth')-&gt;group(function () {
+    Route::get('/laporan-baru', [ItemReportController::class, 'create'])-&gt;name('laporan.create');
+    Route::post('/laporan', [ItemReportController::class, 'store'])-&gt;name('laporan.store');
+    Route::delete('/laporan/{laporan}', [ItemReportController::class, 'destroy'])-&gt;name('laporan.destroy');
+});
+</code></pre></div>
+<p>Perhatiin: daftar dan detail laporan ditaro di luar <code>middleware('auth')</code>, jadi bisa dilihat siapa aja tanpa login. Yang butuh login cuma bikin dan hapus laporan. Ini disengaja, soalnya orang yang kehilangan barang belum tentu punya akun.</p>
+<p>Cek semua route kebaca:</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan route:list
+</code></pre></div>
+</section><section id="trek-0-bab-10" class="bab"><h2><span class="bab-num">10</span><span>View form laporan</span></h2>
+<p><code>resources/views/pages/laporan/create.blade.php</code>:</p>
+<div class="codeblock"><span class="codelang">xml</span><pre><code class="language-xml">&lt;x-app-layout&gt;
+    &lt;x-slot name="header"&gt;
+        &lt;h2 class="text-xl font-semibold text-gray-800"&gt;Buat Laporan&lt;/h2&gt;
+    &lt;/x-slot&gt;
+
+    &lt;div class="py-12"&gt;
+        &lt;div class="mx-auto max-w-3xl sm:px-6 lg:px-8"&gt;
+            &lt;div class="bg-white p-6 shadow-sm sm:rounded-lg"&gt;
+                &lt;form method="POST" action="{{ route('laporan.store') }}" enctype="multipart/form-data" class="space-y-6"&gt;
+                    @csrf
+
+                    &lt;div&gt;
+                        &lt;x-input-label for="report_type" value="Jenis Laporan" /&gt;
+                        &lt;select id="report_type" name="report_type" class="mt-1 block w-full rounded-md border-gray-300"&gt;
+                            @foreach ($types as $key =&gt; $label)
+                                &lt;option value="{{ $key }}" @selected(old('report_type') === $key)&gt;{{ $label }}&lt;/option&gt;
+                            @endforeach
+                        &lt;/select&gt;
+                        &lt;x-input-error :messages="$errors-&gt;get('report_type')" class="mt-2" /&gt;
+                    &lt;/div&gt;
+
+                    &lt;div class="grid grid-cols-2 gap-4"&gt;
+                        &lt;div&gt;
+                            &lt;x-input-label for="category" value="Kategori" /&gt;
+                            &lt;select id="category" name="category" class="mt-1 block w-full rounded-md border-gray-300"&gt;
+                                &lt;option value=""&gt;-- Pilih --&lt;/option&gt;
+                                @foreach ($categories as $key =&gt; $label)
+                                    &lt;option value="{{ $key }}" @selected(old('category') === $key)&gt;{{ $label }}&lt;/option&gt;
+                                @endforeach
+                            &lt;/select&gt;
+                            &lt;x-input-error :messages="$errors-&gt;get('category')" class="mt-2" /&gt;
+                        &lt;/div&gt;
+                        &lt;div&gt;
+                            &lt;x-input-label for="item_name" value="Nama Barang" /&gt;
+                            &lt;x-text-input id="item_name" name="item_name" class="mt-1 block w-full"
+                                :value="old('item_name')" placeholder="Contoh: Dompet kulit hitam" /&gt;
+                            &lt;x-input-error :messages="$errors-&gt;get('item_name')" class="mt-2" /&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+
+                    &lt;div class="grid grid-cols-2 gap-4"&gt;
+                        &lt;div&gt;
+                            &lt;x-input-label for="color" value="Warna" /&gt;
+                            &lt;x-text-input id="color" name="color" class="mt-1 block w-full" :value="old('color')" /&gt;
+                        &lt;/div&gt;
+                        &lt;div&gt;
+                            &lt;x-input-label for="brand" value="Merek" /&gt;
+                            &lt;x-text-input id="brand" name="brand" class="mt-1 block w-full" :value="old('brand')" /&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+
+                    &lt;div&gt;
+                        &lt;x-input-label for="description" value="Ciri-ciri Detail" /&gt;
+                        &lt;textarea id="description" name="description" rows="4"
+                            class="mt-1 block w-full rounded-md border-gray-300"
+                            placeholder="Tulis ciri yang cuma diketahui pemiliknya, misal goresan, isi tas, stiker"&gt;{{ old('description') }}&lt;/textarea&gt;
+                        &lt;x-input-error :messages="$errors-&gt;get('description')" class="mt-2" /&gt;
+                    &lt;/div&gt;
+
+                    &lt;div class="grid grid-cols-2 gap-4"&gt;
+                        &lt;div&gt;
+                            &lt;x-input-label for="location" value="Lokasi" /&gt;
+                            &lt;x-text-input id="location" name="location" class="mt-1 block w-full"
+                                :value="old('location')" placeholder="Contoh: Kantin Gedung B lantai 1" /&gt;
+                            &lt;x-input-error :messages="$errors-&gt;get('location')" class="mt-2" /&gt;
+                        &lt;/div&gt;
+                        &lt;div&gt;
+                            &lt;x-input-label for="event_date" value="Tanggal Kejadian" /&gt;
+                            &lt;x-text-input id="event_date" name="event_date" type="date" class="mt-1 block w-full"
+                                :value="old('event_date')" /&gt;
+                            &lt;x-input-error :messages="$errors-&gt;get('event_date')" class="mt-2" /&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+
+                    &lt;div&gt;
+                        &lt;x-input-label for="storage_place" value="Barang Dititipkan Di (khusus laporan menemukan)" /&gt;
+                        &lt;x-text-input id="storage_place" name="storage_place" class="mt-1 block w-full"
+                            :value="old('storage_place')" placeholder="Contoh: Pos Satpam Gedung B" /&gt;
+                        &lt;x-input-error :messages="$errors-&gt;get('storage_place')" class="mt-2" /&gt;
+                    &lt;/div&gt;
+
+                    &lt;div&gt;
+                        &lt;x-input-label for="contact" value="Kontak yang Bisa Dihubungi" /&gt;
+                        &lt;x-text-input id="contact" name="contact" class="mt-1 block w-full"
+                            :value="old('contact')" placeholder="Nomor WhatsApp atau email" /&gt;
+                        &lt;x-input-error :messages="$errors-&gt;get('contact')" class="mt-2" /&gt;
+                    &lt;/div&gt;
+
+                    &lt;div&gt;
+                        &lt;x-input-label for="photo" value="Foto Barang" /&gt;
+                        &lt;input id="photo" name="photo" type="file" accept="image/*"
+                            class="mt-1 block w-full text-sm text-gray-600 file:mr-4 file:rounded-md file:border-0
+                                   file:bg-gray-800 file:px-4 file:py-2 file:text-sm file:text-white" /&gt;
+                        &lt;p class="mt-1 text-xs text-gray-500"&gt;JPG, PNG, atau WEBP. Maksimal 2 MB.&lt;/p&gt;
+                        &lt;x-input-error :messages="$errors-&gt;get('photo')" class="mt-2" /&gt;
+                    &lt;/div&gt;
+
+                    &lt;div class="flex justify-end gap-3"&gt;
+                        &lt;a href="{{ route('laporan.index') }}" class="px-4 py-2 text-sm text-gray-600"&gt;Batal&lt;/a&gt;
+                        &lt;x-primary-button&gt;Kirim Laporan&lt;/x-primary-button&gt;
+                    &lt;/div&gt;
+                &lt;/form&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/x-app-layout&gt;
+</code></pre></div>
+<p>Tiga hal yang wajib dipahami:</p>
+<ul>
+<li><code>enctype="multipart/form-data"</code> di tag <code>&lt;form&gt;</code>. <strong>Wajib</strong> kalau ada upload file. Kalau lupa, filenya nggak ikut kekirim dan lo bakal bingung kenapa <code>$request-&gt;hasFile('photo')</code> selalu false padahal udah milih gambar.</li>
+<li>Input file nggak pakai komponen Breeze, soalnya Breeze nggak punya. Pakai <code>&lt;input type="file"&gt;</code> biasa, dandanin pakai class <code>file:</code> bawaan Tailwind.</li>
+<li><code>@csrf</code> itu token keamanan. Tiap form POST harus punya ini, kalau nggak Laravel nolak dengan error 419.</li>
+</ul>
+<p><code>old('nama_field')</code> nampilin lagi isian sebelumnya kalau validasi gagal. Sayangnya ini <strong>nggak berlaku buat input file</strong>, jadi kalau validasi gagal user harus milih fotonya lagi. Itu batasan browser, bukan bug.</p>
+</section><section id="trek-0-bab-11" class="bab"><h2><span class="bab-num">11</span><span>View daftar laporan</span></h2>
+<p><code>resources/views/pages/laporan/index.blade.php</code>:</p>
+<div class="codeblock"><span class="codelang">xml</span><pre><code class="language-xml">&lt;x-app-layout&gt;
+    &lt;x-slot name="header"&gt;
+        &lt;div class="flex items-center justify-between"&gt;
+            &lt;h2 class="text-xl font-semibold text-gray-800"&gt;Barang Hilang dan Temuan&lt;/h2&gt;
+            &lt;a href="{{ route('laporan.create') }}" class="rounded-md bg-gray-800 px-4 py-2 text-sm text-white"&gt;
+                Buat Laporan
+            &lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/x-slot&gt;
+
+    &lt;div class="py-12"&gt;
+        &lt;div class="mx-auto max-w-7xl sm:px-6 lg:px-8"&gt;
+            @if (session('success'))
+                &lt;div class="mb-4 rounded-md bg-green-100 p-4 text-green-800"&gt;{{ session('success') }}&lt;/div&gt;
+            @endif
+
+            &lt;form method="GET" class="mb-6 flex flex-wrap gap-3"&gt;
+                &lt;input name="q" value="{{ request('q') }}" placeholder="Cari nama barang"
+                    class="rounded-md border-gray-300 text-sm" /&gt;
+                &lt;select name="type" class="rounded-md border-gray-300 text-sm"&gt;
+                    &lt;option value=""&gt;Semua Jenis&lt;/option&gt;
+                    &lt;option value="hilang" @selected(request('type') === 'hilang')&gt;Kehilangan&lt;/option&gt;
+                    &lt;option value="ditemukan" @selected(request('type') === 'ditemukan')&gt;Menemukan&lt;/option&gt;
+                &lt;/select&gt;
+                &lt;button class="rounded-md bg-gray-800 px-4 text-sm text-white"&gt;Cari&lt;/button&gt;
+            &lt;/form&gt;
+
+            &lt;div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"&gt;
+                @forelse ($reports as $report)
+                    &lt;a href="{{ route('laporan.show', $report) }}"
+                       class="overflow-hidden rounded-lg bg-white shadow-sm transition hover:shadow-md"&gt;
+                        &lt;img src="{{ $report-&gt;photoUrl() }}" alt="Foto {{ $report-&gt;item_name }}"
+                             class="h-44 w-full bg-gray-100 object-cover" loading="lazy" /&gt;
+                        &lt;div class="p-4"&gt;
+                            &lt;span @class([
+                                'rounded-full px-2 py-1 text-xs',
+                                'bg-red-100 text-red-800' =&gt; $report-&gt;report_type === 'hilang',
+                                'bg-green-100 text-green-800' =&gt; $report-&gt;report_type === 'ditemukan',
+                            ])&gt;{{ config('items.types')[$report-&gt;report_type] }}&lt;/span&gt;
+
+                            &lt;h3 class="mt-2 font-semibold text-gray-900"&gt;{{ $report-&gt;item_name }}&lt;/h3&gt;
+                            &lt;p class="text-sm text-gray-600"&gt;{{ $report-&gt;location }}&lt;/p&gt;
+                            &lt;p class="mt-1 text-xs text-gray-500"&gt;
+                                {{ $report-&gt;event_date-&gt;format('d/m/Y') }} &amp;middot;
+                                {{ config('items.categories')[$report-&gt;category] }}
+                            &lt;/p&gt;
+                        &lt;/div&gt;
+                    &lt;/a&gt;
+                @empty
+                    &lt;p class="col-span-full py-10 text-center text-gray-500"&gt;Belum ada laporan.&lt;/p&gt;
+                @endforelse
+            &lt;/div&gt;
+
+            &lt;div class="mt-6"&gt;{{ $reports-&gt;links() }}&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/x-app-layout&gt;
+</code></pre></div>
+<p>Catatan soal nampilin gambar:</p>
+<ul>
+<li><code>object-cover</code> bikin foto ngisi kotak tanpa gepeng. Tanpa ini, foto potrait dan landscape bakal berantakan tingginya.</li>
+<li><code>loading="lazy"</code> bikin gambar baru diunduh pas kelihatan di layar. Halaman isi 12 foto jadi jauh lebih enteng.</li>
+<li><code>alt</code> itu keterangan gambar. Dibaca screen reader, dan muncul kalau fotonya gagal dimuat. Jangan dikosongin.</li>
+<li><code>$report-&gt;photoUrl()</code> itu method yang kita bikin di model tadi. Aman walaupun fotonya kosong.</li>
+</ul>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - bikin sendiri <code>pages/laporan/show.blade.php</code>. Contek pola di atas. Tampilkan foto ukuran besar, semua detail barang (kategori, warna, merek, ciri-ciri), lokasi, tanggal, tempat penitipan kalau ada, kontak pelapor, dan nama pelapor. Kasih tombol hapus yang cuma muncul kalau <code>auth()-&gt;id() === $report-&gt;user_id</code>.</p></div>
+<p>Contoh bentuk tombol hapus, buat contekan form method DELETE:</p>
+<div class="codeblock"><span class="codelang">xml</span><pre><code class="language-xml">&lt;form method="POST" action="{{ route('laporan.destroy', $report) }}"
+      onsubmit="return confirm('Yakin hapus laporan ini?')"&gt;
+    @csrf
+    @method('DELETE')
+    &lt;button class="text-sm text-red-600"&gt;Hapus Laporan&lt;/button&gt;
+&lt;/form&gt;
+</code></pre></div>
+</section><section id="trek-0-bab-12" class="bab"><h2><span class="bab-num">12</span><span>Menu navigasi</span></h2>
+<p>Breeze udah bikin navbar di <code>resources/views/layouts/navigation.blade.php</code>. Buka file itu, cari bagian <code>&lt;x-nav-link&gt;</code> yang isinya Dashboard.</p>
+<p>Ini contoh <strong>satu</strong> menu, cuma ini yang dikasih:</p>
+<div class="codeblock"><span class="codelang">xml</span><pre><code class="language-xml">&lt;x-nav-link :href="route('laporan.index')" :active="request()-&gt;routeIs('laporan.index')"&gt;
+    Semua Laporan
+&lt;/x-nav-link&gt;
+</code></pre></div>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - tambahin sendiri di file yang sama:</p><ul>
+<li>Menu "Buat Laporan" yang ngarah ke <code>route('laporan.create')</code></li>
+<li>Salin dua menu tadi ke bagian bawah file, yang pakai tag <code>&lt;x-responsive-nav-link&gt;</code>. Breeze punya dua navbar: satu buat layar lebar, satu buat HP. Kalau cuma isi yang atas, di HP menunya nggak muncul.</li>
+</ul></div>
+
+</section><section id="trek-0-bab-13" class="bab"><h2><span class="bab-num">13</span><span>Kalau error</span></h2>
+<p>Baca <strong>baris pertama</strong> pesan error, bukan tumpukan panjang di bawahnya. Hampir semua error pemula ada di tabel ini.</p>
+<table>
+<thead>
+<tr>
+<th>Pesan error</th>
+<th>Artinya</th>
+<th>Cara benerin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Foto nggak keupload, <code>hasFile</code> false</td>
+<td>lupa <code>enctype</code> di form</td>
+<td>tambahin <code>enctype="multipart/form-data"</code></td>
+</tr>
+<tr>
+<td>Gambar muncul tapi gambar rusak</td>
+<td><code>storage:link</code> belum dijalanin</td>
+<td><code>php artisan storage:link</code></td>
+</tr>
+<tr>
+<td><code>The photo field must be an image</code></td>
+<td>file bukan gambar, atau extension GD mati</td>
+<td>cek file, cek <code>php -m</code> ada <code>gd</code></td>
+</tr>
+<tr>
+<td><code>The photo field must not be greater than 2048</code></td>
+<td>file lebih dari 2 MB</td>
+<td>kecilin gambarnya</td>
+</tr>
+<tr>
+<td><code>413 Payload Too Large</code></td>
+<td>batas upload PHP kekecilan</td>
+<td>naikin <code>upload_max_filesize</code> di <code>php.ini</code></td>
+</tr>
+<tr>
+<td><code>View [pages.laporan.index] not found</code></td>
+<td>file blade nggak ketemu</td>
+<td>cek nama folder dan ekstensi <code>.blade.php</code></td>
+</tr>
+<tr>
+<td><code>419 Page Expired</code></td>
+<td>lupa <code>@csrf</code></td>
+<td>tambahin <code>@csrf</code></td>
+</tr>
+<tr>
+<td><code>Add [photo_path] to fillable property</code></td>
+<td>kolom nggak ada di <code>$fillable</code></td>
+<td>tambahin di model</td>
+</tr>
+<tr>
+<td>Tampilan polos tanpa warna</td>
+<td>Vite mati</td>
+<td>jalanin <code>npm run dev</code></td>
+</tr>
+</tbody>
+</table>
+<p>Kalau mentok, hapus cache:</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan optimize:clear
+</code></pre></div>
+</section><section id="trek-0-bab-14" class="bab"><h2><span class="bab-num">14</span><span>Checklist Level 1</span></h2>
+<ul>
+<li class="check"><input type="checkbox"/><span>Semua tools keinstall, php -v sampai git --version keluar semua</span></li>
+<li class="check"><input type="checkbox"/><span>Extension GD nyala</span></li>
+<li class="check"><input type="checkbox"/><span>Project jalan di 127.0.0.1:8000</span></li>
+<li class="check"><input type="checkbox"/><span>Halaman /tentang dan /panduan jadi</span></li>
+<li class="check"><input type="checkbox"/><span>Breeze keinstall, bisa register dan login</span></li>
+<li class="check"><input type="checkbox"/><span>Database nyambung, php artisan migrate sukses</span></li>
+<li class="check"><input type="checkbox"/><span>Model ItemReport + relasi di User</span></li>
+<li class="check"><input type="checkbox"/><span>config/items.php isi 10 kategori</span></li>
+<li class="check"><input type="checkbox"/><span>php artisan storage:link sukses, folder public/storage ada</span></li>
+<li class="check"><input type="checkbox"/><span>File no-photo.png ada di public/images</span></li>
+<li class="check"><input type="checkbox"/><span>Form laporan bisa nyimpen data</span></li>
+<li class="check"><input type="checkbox"/><span>Upload foto berhasil, filenya kelihatan di storage/app/public/items</span></li>
+<li class="check"><input type="checkbox"/><span>Daftar laporan muncul lengkap sama fotonya</span></li>
+<li class="check"><input type="checkbox"/><span>Filter jenis dan pencarian nama barang jalan</span></li>
+<li class="check"><input type="checkbox"/><span>Halaman detail dibikin sendiri</span></li>
+<li class="check"><input type="checkbox"/><span>Hapus laporan jalan, dan fotonya ikut kehapus</span></li>
+<li class="check"><input type="checkbox"/><span>Menu navigasi lengkap, desktop dan HP</span></li>
+</ul>
+<p>Kelar semua? Lanjut Level 2.</p>
+</section><footer><span>Bagian ini selesai.</span><span>Juli 2026</span></footer></div><div class="panel" data-track="trek-1"><div class="hero"><span class="eyebrow">Level 2 · Lanjutan</span><h2>Sistemnya jadi kepakai</h2><p>Seeder, banyak foto per laporan, role petugas, middleware, dan alur klaim sampai barang balik ke pemiliknya.</p></div><section id="trek-1-bab-01" class="bab"><h2><span class="bab-num">01</span><span>Apa yang ditambahin</span></h2>
+<p>Level 1 udah bisa nampung laporan. Sekarang bikin sistemnya beneran nyelesaiin masalah: barangnya balik ke pemiliknya.</p>
+<div class="codeblock"><span class="codelang">plaintext</span><pre><code class="language-plaintext">Laporan masuk -&gt; Petugas verifikasi -&gt; Tampil publik
+                                          |
+                    Ada yang ngerasa punya -&gt; ajukan klaim + bukti
+                                          |
+                    Petugas cocokin -&gt; setujui -&gt; status jadi returned
+</code></pre></div>
+<p>Yang dipelajari: seeder, upload banyak foto sekaligus, role user, middleware, dan alur klaim.</p>
+</section><section id="trek-1-bab-02" class="bab"><h2><span class="bab-num">02</span><span>Kategori pindah ke database</span></h2>
+<p>Di Level 1 kategori ditaro di config. Masalahnya, kalau petugas mau nambah kategori, harus panggil programmer. Pindahin ke database biar bisa diatur sendiri.</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan make:model Category -m
+</code></pre></div>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">public function up(): void
+{
+    Schema::create('categories', function (Blueprint $table) {
+        $table-&gt;id();
+        $table-&gt;string('name');
+        $table-&gt;string('slug')-&gt;unique();
+        $table-&gt;boolean('is_active')-&gt;default(true);
+        $table-&gt;timestamps();
+    });
+}
+</code></pre></div>
+<p>Ganti kolom <code>category</code> di <code>item_reports</code> jadi relasi:</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan make:migration change_category_to_relation_on_item_reports_table
+</code></pre></div>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">public function up(): void
+{
+    Schema::table('item_reports', function (Blueprint $table) {
+        $table-&gt;dropColumn('category');
+        $table-&gt;foreignId('category_id')-&gt;after('report_type')-&gt;constrained();
+    });
+}
+</code></pre></div>
+<p>Karena ini project belajar dan datanya masih dummy, gampangnya reset aja:</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan migrate:fresh
+</code></pre></div>
+<blockquote class="note">
+<p><code>migrate:fresh</code> ngehapus <strong>semua</strong> tabel terus bikin ulang dari nol. Jangan pernah jalanin ini di server produksi. Data hilang total, nggak ada undo. Foto yang udah keupload juga jadi yatim: filenya masih ada di folder, tapi nggak ada datanya di database.</p>
+</blockquote>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - bikin sendiri model <code>Category</code>. Isinya: <code>$fillable</code>, cast <code>is_active</code> jadi boolean, relasi <code>itemReports()</code> pakai <code>hasMany</code>, dan method <code>getRouteKeyName()</code> yang return <code>'slug'</code>.</p></div>
+<p>Update juga model <code>ItemReport</code>: ganti <code>'category'</code> di <code>$fillable</code> jadi <code>'category_id'</code>, lalu tambahin relasi:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">public function category(): BelongsTo
+{
+    return $this-&gt;belongsTo(Category::class);
+}
+</code></pre></div>
+</section><section id="trek-1-bab-03" class="bab"><h2><span class="bab-num">03</span><span>Seeder</span></h2>
+<p>Tabel <code>categories</code> sekarang kosong. Ngisi manual tiap kali reset database itu capek. Seeder itu robot pengisi data awal.</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan make:seeder CategorySeeder
+</code></pre></div>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">&lt;?php
+
+namespace Database\Seeders;
+
+use App\Models\Category;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
+
+class CategorySeeder extends Seeder
+{
+    public function run(): void
+    {
+        $names = ['Elektronik', 'Dompet dan Tas'];
+
+        foreach ($names as $name) {
+            Category::updateOrCreate(['slug' =&gt; Str::slug($name)], ['name' =&gt; $name]);
+        }
+    }
+}
+</code></pre></div>
+<p><code>updateOrCreate</code> artinya: kalau slug-nya udah ada, update; kalau belum, bikin baru. Jadi seeder aman dijalanin berkali-kali tanpa bikin data dobel.</p>
+<p>Panggil dari <code>database/seeders/DatabaseSeeder.php</code>, di dalam <code>run()</code>:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">$this-&gt;call(CategorySeeder::class);
+</code></pre></div>
+<p>Jalanin <code>php artisan db:seed</code>, atau sekalian reset plus isi: <code>php artisan migrate:fresh --seed</code>.</p>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - pindahin semua kategori dari <code>config/items.php</code> ke seeder ini, minimal 10. Terus di <code>DatabaseSeeder</code>, bikin juga 2 user dummy pakai <code>User::create()</code>.</p></div>
+</section><section id="trek-1-bab-04" class="bab"><h2><span class="bab-num">04</span><span>Banyak foto per laporan</span></h2>
+<p>Satu foto sering nggak cukup. Dompet perlu difoto luar dan dalam. Ini butuh tabel terpisah, karena satu laporan bisa punya banyak foto.</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan make:model ItemPhoto -m
+</code></pre></div>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">public function up(): void
+{
+    Schema::create('item_photos', function (Blueprint $table) {
+        $table-&gt;id();
+        $table-&gt;foreignId('item_report_id')-&gt;constrained()-&gt;cascadeOnDelete();
+        $table-&gt;string('path');
+        $table-&gt;timestamps();
+    });
+}
+</code></pre></div>
+<p><code>cascadeOnDelete()</code> artinya kalau laporannya dihapus, semua barisan fotonya ikut kehapus otomatis dari database.</p>
+<p>Di model <code>ItemReport</code>:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">public function photos(): \Illuminate\Database\Eloquent\Relations\HasMany
+{
+    return $this-&gt;hasMany(ItemPhoto::class);
+}
+</code></pre></div>
+<p>Di form, ubah input file jadi bisa pilih banyak. Perhatiin <code>name</code>-nya pakai kurung siku:</p>
+<div class="codeblock"><span class="codelang">xml</span><pre><code class="language-xml">&lt;input id="photos" name="photos[]" type="file" accept="image/*" multiple class="mt-1 block w-full text-sm" /&gt;
+</code></pre></div>
+<p>Di controller, validasi dan simpannya jadi gini:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">$request-&gt;validate([
+    'photos' =&gt; ['nullable', 'array', 'max:5'],
+    'photos.*' =&gt; ['image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+]);
+
+foreach ($request-&gt;file('photos', []) as $photo) {
+    $report-&gt;photos()-&gt;create(['path' =&gt; $photo-&gt;store('items', 'public')]);
+}
+</code></pre></div>
+<p><code>photos.*</code> artinya "aturan ini berlaku buat tiap file di dalam array". <code>photos</code> sendiri diatur jumlahnya, maksimal 5.</p>
+<blockquote class="note">
+<p>Hati-hati: <code>cascadeOnDelete</code> cuma ngehapus baris database, <strong>file fotonya tetep nyangkut di folder</strong>. Buat ngehapus filenya beneran, lo harus loop dulu sebelum ngehapus laporannya, atau pakai model event <code>deleting</code>.</p>
+</blockquote>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - update <code>destroy()</code> di controller biar semua file foto ikut kehapus dari storage sebelum laporannya dihapus. Terus di halaman detail, ganti satu gambar jadi galeri: foto pertama gede, sisanya kecil di bawahnya.</p></div>
+</section><section id="trek-1-bab-05" class="bab"><h2><span class="bab-num">05</span><span>Role user</span></h2>
+<p>Sekarang semua user statusnya sama. Kita butuh pembeda: pelapor biasa dan petugas.</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan make:migration add_role_to_users_table
+</code></pre></div>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">public function up(): void
+{
+    Schema::table('users', function (Blueprint $table) {
+        $table-&gt;string('role')-&gt;default('pelapor')-&gt;after('email');
+        $table-&gt;string('phone', 20)-&gt;nullable()-&gt;after('role');
+    });
+}
+</code></pre></div>
+<p>Di <code>app/Models/User.php</code>, tambahin <code>'role'</code> dan <code>'phone'</code> ke <code>$fillable</code>, terus:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">public function isPetugas(): bool
+{
+    return $this-&gt;role === 'petugas';
+}
+</code></pre></div>
+<p>Buat sekarang, cara jadi petugas: ubah manual lewat phpMyAdmin, ganti kolom <code>role</code> jadi <code>petugas</code>.</p>
+</section><section id="trek-1-bab-06" class="bab"><h2><span class="bab-num">06</span><span>Middleware</span></h2>
+<p>Middleware itu satpam di depan pintu. Tiap request lewat dia dulu sebelum masuk controller.</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan make:middleware EnsureUserIsPetugas
+</code></pre></div>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">&lt;?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class EnsureUserIsPetugas
+{
+    public function handle(Request $request, Closure $next): Response
+    {
+        abort_unless($request-&gt;user()?-&gt;isPetugas(), 403);
+
+        return $next($request);
+    }
+}
+</code></pre></div>
+<p>Kasih nama pendek biar gampang dipanggil, di <code>bootstrap/app.php</code>:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">-&gt;withMiddleware(function (Middleware $middleware) {
+    $middleware-&gt;alias([
+        'petugas' =&gt; \App\Http\Middleware\EnsureUserIsPetugas::class,
+    ]);
+})
+</code></pre></div>
+<p>Sekarang <code>middleware('petugas')</code> bisa dipasang di route mana pun.</p>
+</section><section id="trek-1-bab-07" class="bab"><h2><span class="bab-num">07</span><span>Klaim barang</span></h2>
+<p>Ini inti sistemnya. Orang yang ngerasa barangnya ada di laporan temuan, ngajuin klaim plus bukti.</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan make:model Claim -m
+</code></pre></div>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">public function up(): void
+{
+    Schema::create('claims', function (Blueprint $table) {
+        $table-&gt;id();
+        $table-&gt;foreignId('item_report_id')-&gt;constrained()-&gt;cascadeOnDelete();
+        $table-&gt;foreignId('user_id')-&gt;constrained()-&gt;cascadeOnDelete();
+        $table-&gt;text('proof_description');
+        $table-&gt;string('proof_path')-&gt;nullable();
+        $table-&gt;string('status')-&gt;default('pending');
+        $table-&gt;text('officer_note')-&gt;nullable();
+        $table-&gt;timestamps();
+    });
+}
+</code></pre></div>
+<p><code>proof_description</code> itu bukti kepemilikan berupa tulisan, misal isi dompetnya apa aja. <code>proof_path</code> buat upload bukti tambahan, misal foto pas lagi make barang itu.</p>
+<p>Controller-nya, dikasih <code>store()</code> doang:</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan make:controller ClaimController
+</code></pre></div>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">public function store(Request $request, ItemReport $report): RedirectResponse
+{
+    abort_unless($report-&gt;report_type === 'ditemukan' &amp;&amp; $report-&gt;status === 'open', 422);
+    abort_if($report-&gt;user_id === $request-&gt;user()-&gt;id, 403, 'Nggak bisa klaim laporan sendiri.');
+
+    $data = $request-&gt;validate([
+        'proof_description' =&gt; ['required', 'string', 'min:20', 'max:1000'],
+        'proof' =&gt; ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+    ]);
+
+    if ($request-&gt;hasFile('proof')) {
+        $data['proof_path'] = $request-&gt;file('proof')-&gt;store('proofs', 'public');
+    }
+
+    $report-&gt;claims()-&gt;create($data + ['user_id' =&gt; $request-&gt;user()-&gt;id]);
+
+    return back()-&gt;with('success', 'Klaim dikirim. Tunggu diverifikasi petugas.');
+}
+</code></pre></div>
+<p>Dua baris <code>abort</code> di atas itu yang bikin sistemnya nggak gampang disalahgunakan: cuma laporan temuan yang masih terbuka yang bisa diklaim, dan orang nggak bisa ngeklaim laporannya sendiri.</p>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - bikin sendiri:</p><ul>
+<li>Relasi <code>claims()</code> di model <code>ItemReport</code></li>
+<li>Route POST buat klaim, taro di dalam <code>middleware('auth')</code></li>
+<li>Form klaim di halaman detail, muncul cuma kalau laporannya jenis temuan dan statusnya masih <code>open</code></li>
+</ul></div>
+
+</section><section id="trek-1-bab-08" class="bab"><h2><span class="bab-num">08</span><span>Halaman petugas</span></h2>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan make:controller Petugas/ClaimReviewController
+</code></pre></div>
+<p>Dikasih <code>index()</code> dan <code>approve()</code> doang:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">&lt;?php
+
+namespace App\Http\Controllers\Petugas;
+
+use App\Http\Controllers\Controller;
+use App\Models\Claim;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class ClaimReviewController extends Controller
+{
+    public function index(Request $request): View
+    {
+        $claims = Claim::with('user', 'itemReport.category')
+            -&gt;when($request-&gt;status, fn ($query, $status) =&gt; $query-&gt;where('status', $status))
+            -&gt;latest()
+            -&gt;paginate(15);
+
+        return view('pages.petugas.klaim.index', compact('claims'));
+    }
+
+    public function approve(Claim $claim): RedirectResponse
+    {
+        abort_unless($claim-&gt;status === 'pending', 422);
+
+        $claim-&gt;update(['status' =&gt; 'approved']);
+        $claim-&gt;itemReport-&gt;update(['status' =&gt; 'returned']);
+
+        $claim-&gt;itemReport-&gt;claims()
+            -&gt;where('id', '!=', $claim-&gt;id)
+            -&gt;where('status', 'pending')
+            -&gt;update(['status' =&gt; 'rejected', 'officer_note' =&gt; 'Barang sudah diklaim pihak lain.']);
+
+        return back()-&gt;with('success', 'Klaim disetujui, barang ditandai sudah dikembalikan.');
+    }
+}
+</code></pre></div>
+<p>Method <code>approve()</code> ngerjain tiga hal sekaligus: setujui klaimnya, tandai barangnya udah balik, dan tolak otomatis klaim lain buat barang yang sama. Tanpa langkah ketiga, satu barang bisa diklaim dua orang dan petugas bingung sendiri.</p>
+<blockquote class="note">
+<p><code>-&gt;with('user', 'itemReport.category')</code> itu eager loading. Titik di <code>itemReport.category</code> artinya ambil relasi bertingkat sekalian. Tanpa ini, nampilin 15 baris butuh puluhan query database, bukan tiga. Namanya masalah N+1, dan ini penyebab web lemot nomor satu.</p>
+</blockquote>
+<p>Route-nya:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">use App\Http\Controllers\Petugas\ClaimReviewController;
+
+Route::middleware(['auth', 'petugas'])-&gt;prefix('petugas')-&gt;name('petugas.')-&gt;group(function () {
+    Route::get('klaim', [ClaimReviewController::class, 'index'])-&gt;name('klaim.index');
+    Route::patch('klaim/{claim}/approve', [ClaimReviewController::class, 'approve'])-&gt;name('klaim.approve');
+});
+</code></pre></div>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - bikin sendiri:</p><ul>
+<li>Method <code>reject()</code>: wajib validasi <code>officer_note</code> minimal 5 karakter, status klaim jadi <code>rejected</code>, dan status laporannya <strong>jangan</strong> diubah</li>
+<li>View <code>pages/petugas/klaim/index.blade.php</code>: tabel berisi nama pengklaim, nama barang, bukti tulisan, thumbnail bukti foto, plus tombol Setujui dan Tolak</li>
+<li>Menu "Verifikasi Klaim" di navbar, dibungkus <code>@if (auth()-&gt;user()-&gt;isPetugas())</code> biar pelapor biasa nggak lihat</li>
+</ul></div>
+
+<p>Contoh bentuk tombol setujui, buat contekan form method PATCH:</p>
+<div class="codeblock"><span class="codelang">xml</span><pre><code class="language-xml">&lt;form method="POST" action="{{ route('petugas.klaim.approve', $claim) }}"&gt;
+    @csrf
+    @method('PATCH')
+    &lt;x-primary-button&gt;Setujui&lt;/x-primary-button&gt;
+&lt;/form&gt;
+</code></pre></div>
+</section><section id="trek-1-bab-09" class="bab"><h2><span class="bab-num">09</span><span>Checklist Level 2</span></h2>
+<ul>
+<li class="check"><input type="checkbox"/><span>Tabel categories + relasi di item_reports</span></li>
+<li class="check"><input type="checkbox"/><span>Model Category lengkap</span></li>
+<li class="check"><input type="checkbox"/><span>Seeder isi minimal 10 kategori</span></li>
+<li class="check"><input type="checkbox"/><span>Tabel item_photos, upload banyak foto jalan</span></li>
+<li class="check"><input type="checkbox"/><span>Hapus laporan ikut ngehapus semua file fotonya</span></li>
+<li class="check"><input type="checkbox"/><span>Galeri foto di halaman detail</span></li>
+<li class="check"><input type="checkbox"/><span>Kolom role dan phone di tabel users</span></li>
+<li class="check"><input type="checkbox"/><span>Middleware petugas jalan, pelapor biasa dapet 403</span></li>
+<li class="check"><input type="checkbox"/><span>Tabel claims + form klaim di halaman detail</span></li>
+<li class="check"><input type="checkbox"/><span>Nggak bisa klaim laporan sendiri</span></li>
+<li class="check"><input type="checkbox"/><span>Halaman petugas nampilin semua klaim</span></li>
+<li class="check"><input type="checkbox"/><span>Setujui klaim otomatis nolak klaim lain buat barang yang sama</span></li>
+<li class="check"><input type="checkbox"/><span>Tolak klaim wajib isi alasan</span></li>
+</ul>
+</section><section id="trek-1-bab-10" class="bab"><h2><span class="bab-num">10</span><span>Kalau masih kurang nantang</span></h2>
+<ul>
+<li>Kirim email otomatis waktu klaim disetujui atau ditolak (<code>php artisan make:notification</code>)</li>
+<li>Kompres foto otomatis waktu diupload biar hemat penyimpanan</li>
+<li>Pencocokan otomatis: waktu laporan kehilangan masuk, sistem nyariin laporan temuan yang kategori dan lokasinya mirip</li>
+<li>Arsip otomatis buat laporan yang udah lewat 90 hari</li>
+<li>Statistik: kategori barang apa yang paling sering hilang, gedung mana yang paling rawan</li>
+</ul>
+<blockquote class="note">
+<p>Satu hal yang perlu diketahui: di panduan ini foto disimpen di folder server. Kalau nanti aplikasinya dipasang di hosting yang punya dua server atau lebih, cara ini bakal bermasalah karena tiap server punya folder sendiri-sendiri. Solusinya pindah ke penyimpanan objek seperti S3, dan Laravel udah nyediain caranya lewat konfigurasi disk. Kodenya nggak berubah, cuma nama disk-nya doang.</p>
+</blockquote>
+</section><footer><span>Bagian ini selesai.</span><span>Juli 2026</span></footer></div><div class="panel" data-track="trek-2"><div class="hero"><span class="eyebrow">Git &amp; GitHub</span><h2>Simpen kodenya online</h2><p>Pakai Git Bash buat nyimpen riwayat kode, push ke GitHub, dan pastiin foto user nggak ikut kebawa.</p></div><section id="trek-2-bab-01" class="bab"><h2><span class="bab-num">01</span><span>Kenapa perlu Git</span></h2>
+<p>Git itu tombol undo raksasa buat kode. Tiap perubahan disimpen, dan lo bisa balik ke versi kapan pun.</p>
+<p>GitHub itu tempat nyimpen Git lo di internet. Gunanya: kode nggak hilang kalau laptop rusak, bisa dikerjain bareng, dan jadi portofolio yang bisa dilihat orang.</p>
+<p>Beda dua-duanya: Git jalan di laptop lo, GitHub di internet. Bisa pakai Git tanpa GitHub, tapi jangan.</p>
+</section><section id="trek-2-bab-02" class="bab"><h2><span class="bab-num">02</span><span>Setelan awal</span></h2>
+<p>Buka <strong>Git Bash</strong>, jalanin sekali seumur hidup:</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">git config --global user.name "Nama Lo"
+git config --global user.email "email@yang-dipakai-daftar-github.com"
+git config --global init.defaultBranch main
+</code></pre></div>
+<p>Email-nya harus sama dengan yang lo pakai daftar GitHub, biar commit lo keitung.</p>
+<p>Cek udah bener: <code>git config --list</code>.</p>
+</section><section id="trek-2-bab-03" class="bab"><h2><span class="bab-num">03</span><span>Jangan sampai kepush</span></h2>
+<p>Dua hal yang haram masuk GitHub di project ini.</p>
+<p><strong>Pertama, file <code>.env</code>.</strong> Isinya password database dan kunci aplikasi.</p>
+<p><strong>Kedua, foto yang diupload user.</strong> Ini penting khusus buat project kayak gini. Isi folder <code>storage/app/public/</code> itu data, bukan kode. Kalau ikut kepush, repo lo bakal bengkak ratusan megabyte, dan foto barang orang lain jadi bisa diakses siapa aja yang buka GitHub lo.</p>
+<p>Laravel udah otomatis bikin <code>.gitignore</code> yang ngeblok <code>.env</code>, <code>vendor/</code>, <code>node_modules/</code>, dan isi <code>storage/</code>. Cek dulu:</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">cat .gitignore
+</code></pre></div>
+<p>Pastiin ada baris <code>.env</code> dan <code>/storage/*.key</code>. Buat aman, tambahin sendiri baris ini di paling bawah:</p>
+<div class="codeblock"><span class="codelang">plaintext</span><pre><code class="language-plaintext">/storage/app/public/*
+!/storage/app/public/.gitkeep
+/public/storage
+</code></pre></div>
+<p>Baris pertama ngeblok semua isi folder upload. Baris kedua tetep ngizinin satu file penanda biar foldernya nggak hilang dari repo. Baris ketiga ngeblok pintu tembus hasil <code>storage:link</code>, karena itu harus dibikin ulang di tiap komputer.</p>
+<p><code>vendor/</code> dan <code>node_modules/</code> juga diblokir karena isinya ribuan file hasil download. Orang lain tinggal <code>composer install</code> dan <code>npm install</code> buat dapetin isinya lagi.</p>
+</section><section id="trek-2-bab-04" class="bab"><h2><span class="bab-num">04</span><span>Commit pertama</span></h2>
+<p>Masuk ke folder project dulu:</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">cd /c/laragon/www/barang-hilang
+git init
+git status
+</code></pre></div>
+<p><code>git status</code> nampilin file apa aja yang berubah. Warna merah artinya belum disimpen Git. Kalau di situ ada nama file foto <code>.jpg</code>, berarti <code>.gitignore</code> lo belum bener. Benerin dulu, jangan lanjut.</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">git add .
+git commit -m "Setup awal project Lost and Found"
+</code></pre></div>
+<ul>
+<li><code>git add .</code> artinya "siapin semua perubahan"</li>
+<li><code>git commit -m "..."</code> artinya "simpen, dengan catatan ini"</li>
+</ul>
+<p>Pesan commit ditulis jelas: <code>Tambah upload foto laporan</code>, bukan <code>update</code> atau <code>asdf</code>. Nanti lo sendiri yang bingung.</p>
+<p>Lihat riwayatnya: <code>git log --oneline</code>.</p>
+</section><section id="trek-2-bab-05" class="bab"><h2><span class="bab-num">05</span><span>Bikin repo di GitHub dan push</span></h2>
+<p>Buka <a href="https://github.com/new">github.com/new</a>. Isi:</p>
+<ul>
+<li>Repository name: <code>barang-hilang</code></li>
+<li>Pilih <strong>Public</strong> atau <strong>Private</strong>, bebas</li>
+<li><strong>Jangan</strong> centang "Add a README file". Biarin kosong, soalnya project kita udah ada isinya.</li>
+</ul>
+<p>Klik Create repository. GitHub bakal nampilin alamat repo-nya, bentuknya <code>https://github.com/username/barang-hilang.git</code>.</p>
+<p>Balik ke Git Bash:</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">git remote add origin https://github.com/username/barang-hilang.git
+git push -u origin main
+</code></pre></div>
+<p>Ganti <code>username</code> sama username GitHub lo. Pas pertama kali push, muncul jendela login GitHub. Login lewat browser aja, paling gampang.</p>
+<p>Refresh halaman GitHub-nya. Kode lo udah ada di situ.</p>
+<blockquote class="note">
+<p>Kalau muncul error <code>src refspec main does not match any</code>, berarti branch lo masih namanya <code>master</code>. Ganti dengan <code>git branch -M main</code>, terus push lagi.</p>
+</blockquote>
+</section><section id="trek-2-bab-06" class="bab"><h2><span class="bab-num">06</span><span>Alur harian</span></h2>
+<p>Tiap selesai ngerjain satu fitur, ulangi tiga langkah ini:</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">git add .
+git commit -m "Tambah galeri foto di halaman detail"
+git push
+</code></pre></div>
+<p>Cuma itu. <code>git push</code> doang, tanpa embel-embel, karena <code>-u origin main</code> tadi udah nyimpen tujuannya.</p>
+<p>Kalau ngoding di komputer lain, ambil versi terbaru dulu: <code>git pull</code>.</p>
+</section><section id="trek-2-bab-07" class="bab"><h2><span class="bab-num">07</span><span>Branch</span></h2>
+<p>Branch itu jalur terpisah. Gunanya biar kalau lo bikin fitur baru dan ternyata kacau, kode utama tetep aman.</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">git checkout -b fitur-klaim
+</code></pre></div>
+<p>Kerja seperti biasa, <code>add</code> dan <code>commit</code> di branch itu. Kalau udah beres dan mau digabung ke jalur utama:</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">git checkout main
+git merge fitur-klaim
+git push
+</code></pre></div>
+<p>Pindah-pindah branch: <code>git checkout main</code> atau <code>git checkout fitur-klaim</code>. Lihat lo lagi di branch mana: <code>git branch</code>.</p>
+</section><section id="trek-2-bab-08" class="bab"><h2><span class="bab-num">08</span><span>Perintah darurat</span></h2>
+<table>
+<thead>
+<tr>
+<th>Situasi</th>
+<th>Perintah</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Salah edit file, belum di-commit</td>
+<td><code>git checkout -- namafile</code></td>
+</tr>
+<tr>
+<td>Udah <code>git add</code>, mau dibatalin</td>
+<td><code>git reset namafile</code></td>
+</tr>
+<tr>
+<td>Pesan commit terakhir salah tulis</td>
+<td><code>git commit --amend -m "Pesan baru"</code></td>
+</tr>
+<tr>
+<td>Mau lihat perubahan apa aja</td>
+<td><code>git diff</code></td>
+</tr>
+<tr>
+<td>Mau download project orang</td>
+<td><code>git clone &lt;url-repo&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote class="note">
+<p>Jangan pakai <code>git reset --hard</code> kalau belum paham. Itu ngehapus kerjaan lo tanpa bisa dibalikin.</p>
+</blockquote>
+<p>Kalau lo kadung ngepush foto atau <code>.env</code>, ngehapusnya nggak cukup pakai <code>git rm</code> doang, soalnya filenya masih nyimpen di riwayat. Cara paling aman buat pemula: ganti semua password yang bocor, terus bikin repo baru dari nol.</p>
+</section><section id="trek-2-bab-09" class="bab"><h2><span class="bab-num">09</span><span>Habis clone dari GitHub</span></h2>
+<p>Kalau lo atau orang lain clone project ini dari GitHub, foldernya belum bisa langsung jalan:</p>
+<div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+php artisan storage:link
+npm run dev
+</code></pre></div>
+<p>Perhatiin ada <code>php artisan storage:link</code> di situ. Ini wajib dan gampang kelupaan, soalnya pintu tembus foto tadi memang sengaja nggak ikut di-push. Lupa jalanin ini, semua foto di web bakal jadi ikon gambar rusak.</p>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - bikin file <code>README.md</code> di root project, isinya: nama project, apa fungsinya, dan tujuh perintah di atas sebagai langkah instalasi. File ini yang pertama dilihat orang waktu buka repo lo.</p></div></section><footer><span>Bagian ini selesai.</span><span>Juli 2026</span></footer></div></main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+document.querySelectorAll('pre code').forEach(function(b){ if(window.hljs) hljs.highlightElement(b); });
+
+var tabs = document.querySelectorAll('.tab');
+var panels = document.querySelectorAll('.panel');
+var groups = document.querySelectorAll('.toc-group');
+var toc = document.getElementById('toc');
+var btn = document.getElementById('menuBtn');
+
+function openTrack(id, scroll){
+  tabs.forEach(function(t){ t.classList.toggle('on', t.dataset.track === id); });
+  panels.forEach(function(p){ p.classList.toggle('on', p.dataset.track === id); });
+  groups.forEach(function(g){ g.classList.toggle('on', g.dataset.track === id); });
+  if (scroll) window.scrollTo({top:0});
+}
+tabs.forEach(function(t){ t.addEventListener('click', function(){ openTrack(t.dataset.track, true); }); });
+openTrack(tabs[0].dataset.track, false);
+
+if (location.hash) {
+  var el = document.querySelector(location.hash);
+  if (el) { openTrack(el.closest('.panel').dataset.track, false); el.scrollIntoView(); }
+}
+
+var links = document.querySelectorAll('nav.toc a');
+var io = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(!e.isIntersecting) return;
+    links.forEach(function(l){ l.classList.toggle('on', l.dataset.target === e.target.id); });
+  });
+}, {rootMargin:'-130px 0px -70% 0px'});
+document.querySelectorAll('section.bab').forEach(function(s){ io.observe(s); });
+
+btn.addEventListener('click', function(){
+  btn.setAttribute('aria-expanded', toc.classList.toggle('open'));
+});
+toc.addEventListener('click', function(e){ if(e.target.closest('a')) toc.classList.remove('open'); });
+</script>
+</body>
+</html>
