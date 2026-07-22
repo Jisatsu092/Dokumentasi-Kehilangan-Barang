@@ -292,7 +292,16 @@ cd barang-hilang
 @if ($status === 'open') ... @endif
 @foreach ($items as $item) ... @endforeach
 </code></pre></div>
-<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - bikin halaman <code>/panduan</code> dengan cara yang sama, isinya aturan main pelaporan. View-nya di <code>pages/panduan/index.blade.php</code>.</p></div>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - bikin halaman <code>/panduan</code>. Caranya persis kayak <code>/tentang</code> barusan, tinggal salin dan ganti kata:</p><ol>
+<li>Buka <code>routes/web.php</code>. Salin 3 baris route <code>/tentang</code> tadi, tempel di bawahnya</li>
+<li>Di baris salinan itu, ganti kata <code>tentang</code> jadi <code>panduan</code>. Ada 2 tempat</li>
+<li>Bikin folder <code>resources/views/pages/panduan/</code>, terus bikin file <code>index.blade.php</code> di dalamnya</li>
+<li>Salin semua isi <code>pages/tentang/index.blade.php</code> ke file baru itu</li>
+<li>Ganti tulisan di dalam <code>&lt;h1&gt;</code> sama <code>&lt;p&gt;</code> sesuka lo</li>
+<li>Buka <code>127.0.0.1:8000/panduan</code></li>
+</ol></div>
+
+<p>Kalau halamannya muncul, berarti lo udah paham hubungan Route sama View. Cuma itu targetnya, nggak usah bikin yang bagus dulu.</p>
 </section><section id="trek-0-bab-04" class="bab"><h2><span class="bab-num">04</span><span>Login dan register instan pakai Breeze</span></h2>
 <p>Nulis sistem login dari nol itu ribet dan gampang bocor. Laravel udah nyediain paketnya, namanya Breeze.</p>
 <div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">composer require laravel/breeze --dev
@@ -433,7 +442,17 @@ return [
 ];
 </code></pre></div>
 <p>Manggilnya dari mana aja: <code>config('items.categories')</code>.</p>
-<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - tambahin 3 kategori lagi yang masuk akal buat kampus. Contoh: perhiasan, botol minum, helm dan perlengkapan motor.</p></div>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - tambahin 3 kategori lagi di file itu.</p></div>
+<p>Salin salah satu baris yang udah ada, misal baris ini:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">'kunci' =&gt; 'Kunci',
+</code></pre></div>
+<p>Tempel di bawahnya, terus ganti dua bagiannya:</p>
+<ul>
+<li>Bagian kiri (<code>'kunci'</code>) itu kode. Wajib huruf kecil semua, tanpa spasi. Kalau dua kata, pisah pakai tanda minus: <code>'botol-minum'</code></li>
+<li>Bagian kanan (<code>'Kunci'</code>) itu tulisan yang dilihat user. Bebas, boleh pakai spasi dan huruf besar</li>
+</ul>
+<p>Tiga yang bisa lo tambahin: perhiasan, botol minum, helm.</p>
+<p>Jangan lupa koma di ujung tiap baris. Lupa koma, langsung error.</p>
 </section><section id="trek-0-bab-08" class="bab"><h2><span class="bab-num">08</span><span>Siapin tempat penyimpanan foto</span></h2>
 <p>Ini bagian yang beda dari project biasa, jadi baca pelan-pelan.</p>
 <p>Foto yang diupload user disimpen di <code>storage/app/public/</code>. Masalahnya, folder <code>storage</code> itu nggak bisa dibuka langsung dari browser demi keamanan. Solusinya, Laravel bikin jalan pintas:</p>
@@ -759,27 +778,144 @@ Route::middleware('auth')-&gt;group(function () {
 <li><code>alt</code> itu keterangan gambar. Dibaca screen reader, dan muncul kalau fotonya gagal dimuat. Jangan dikosongin.</li>
 <li><code>$report-&gt;photoUrl()</code> itu method yang kita bikin di model tadi. Aman walaupun fotonya kosong.</li>
 </ul>
-<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - bikin sendiri <code>pages/laporan/show.blade.php</code>. Contek pola di atas. Tampilkan foto ukuran besar, semua detail barang (kategori, warna, merek, ciri-ciri), lokasi, tanggal, tempat penitipan kalau ada, kontak pelapor, dan nama pelapor. Kasih tombol hapus yang cuma muncul kalau <code>auth()-&gt;id() === $report-&gt;user_id</code>.</p></div>
-<p>Contoh bentuk tombol hapus, buat contekan form method DELETE:</p>
-<div class="codeblock"><span class="codelang">xml</span><pre><code class="language-xml">&lt;form method="POST" action="{{ route('laporan.destroy', $report) }}"
-      onsubmit="return confirm('Yakin hapus laporan ini?')"&gt;
-    @csrf
-    @method('DELETE')
-    &lt;button class="text-sm text-red-600"&gt;Hapus Laporan&lt;/button&gt;
-&lt;/form&gt;
+<h3>Halaman detail</h3>
+<p>Ini file terakhir biar aplikasinya jalan utuh. Bikin <code>resources/views/pages/laporan/show.blade.php</code>, salin semua ini:</p>
+<div class="codeblock"><span class="codelang">xml</span><pre><code class="language-xml">&lt;x-app-layout&gt;
+    &lt;x-slot name="header"&gt;
+        &lt;h2 class="text-xl font-semibold text-gray-800"&gt;Detail Laporan&lt;/h2&gt;
+    &lt;/x-slot&gt;
+
+    &lt;div class="py-12"&gt;
+        &lt;div class="mx-auto max-w-4xl sm:px-6 lg:px-8"&gt;
+            &lt;div class="overflow-hidden rounded-lg bg-white shadow-sm"&gt;
+                &lt;img src="{{ $report-&gt;photoUrl() }}" alt="Foto {{ $report-&gt;item_name }}"
+                     class="h-80 w-full bg-gray-100 object-cover" /&gt;
+
+                &lt;div class="p-6"&gt;
+                    &lt;span @class([
+                        'rounded-full px-2 py-1 text-xs',
+                        'bg-red-100 text-red-800' =&gt; $report-&gt;report_type === 'hilang',
+                        'bg-green-100 text-green-800' =&gt; $report-&gt;report_type === 'ditemukan',
+                    ])&gt;{{ config('items.types')[$report-&gt;report_type] }}&lt;/span&gt;
+
+                    &lt;h3 class="mt-3 text-2xl font-bold text-gray-900"&gt;{{ $report-&gt;item_name }}&lt;/h3&gt;
+
+                    &lt;table class="mt-5 w-full text-sm"&gt;
+                        &lt;tr class="border-b"&gt;
+                            &lt;td class="w-48 py-2 text-gray-500"&gt;Kategori&lt;/td&gt;
+                            &lt;td class="py-2"&gt;{{ config('items.categories')[$report-&gt;category] }}&lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr class="border-b"&gt;
+                            &lt;td class="py-2 text-gray-500"&gt;Warna&lt;/td&gt;
+                            &lt;td class="py-2"&gt;{{ $report-&gt;color ?? '-' }}&lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr class="border-b"&gt;
+                            &lt;td class="py-2 text-gray-500"&gt;Merek&lt;/td&gt;
+                            &lt;td class="py-2"&gt;{{ $report-&gt;brand ?? '-' }}&lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr class="border-b"&gt;
+                            &lt;td class="py-2 text-gray-500"&gt;Lokasi&lt;/td&gt;
+                            &lt;td class="py-2"&gt;{{ $report-&gt;location }}&lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr class="border-b"&gt;
+                            &lt;td class="py-2 text-gray-500"&gt;Tanggal Kejadian&lt;/td&gt;
+                            &lt;td class="py-2"&gt;{{ $report-&gt;event_date-&gt;format('d/m/Y') }}&lt;/td&gt;
+                        &lt;/tr&gt;
+                        @if ($report-&gt;storage_place)
+                            &lt;tr class="border-b"&gt;
+                                &lt;td class="py-2 text-gray-500"&gt;Dititipkan Di&lt;/td&gt;
+                                &lt;td class="py-2"&gt;{{ $report-&gt;storage_place }}&lt;/td&gt;
+                            &lt;/tr&gt;
+                        @endif
+                        &lt;tr class="border-b"&gt;
+                            &lt;td class="py-2 text-gray-500"&gt;Kontak&lt;/td&gt;
+                            &lt;td class="py-2"&gt;{{ $report-&gt;contact }}&lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr&gt;
+                            &lt;td class="py-2 text-gray-500"&gt;Pelapor&lt;/td&gt;
+                            &lt;td class="py-2"&gt;{{ $report-&gt;user-&gt;name }}&lt;/td&gt;
+                        &lt;/tr&gt;
+                    &lt;/table&gt;
+
+                    &lt;h4 class="mt-6 font-semibold text-gray-800"&gt;Ciri-ciri&lt;/h4&gt;
+                    &lt;p class="mt-1 whitespace-pre-line text-gray-700"&gt;{{ $report-&gt;description }}&lt;/p&gt;
+
+                    &lt;div class="mt-8 flex items-center justify-between"&gt;
+                        &lt;a href="{{ route('laporan.index') }}" class="text-sm text-gray-600"&gt;Kembali&lt;/a&gt;
+
+                        @if (auth()-&gt;id() === $report-&gt;user_id)
+                            &lt;form method="POST" action="{{ route('laporan.destroy', $report) }}"
+                                  onsubmit="return confirm('Yakin hapus laporan ini?')"&gt;
+                                @csrf
+                                @method('DELETE')
+                                &lt;button class="text-sm text-red-600"&gt;Hapus Laporan&lt;/button&gt;
+                            &lt;/form&gt;
+                        @endif
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/x-app-layout&gt;
 </code></pre></div>
+<p>Buka salah satu laporan dari halaman daftar, pastiin muncul.</p>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - ubah tiga hal kecil di file yang barusan lo salin:</p><ol>
+<li>Ganti tulisan <code>Detail Laporan</code> di bagian header jadi <code>Rincian Barang</code></li>
+<li>Ganti label <code>Merek</code> jadi <code>Merek atau Tipe</code></li>
+<li>Tambahin satu baris tanggal lapor. Caranya: salin blok <code>&lt;tr&gt;</code> yang isinya Warna, tempel di bawah blok Kontak, terus ganti kata <code>Warna</code> jadi <code>Tanggal Lapor</code> dan ganti <code>{{ $report-&gt;color ?? '-' }}</code> jadi <code>{{ $report-&gt;created_at-&gt;format('d/m/Y') }}</code></li>
+</ol></div>
+
+<p>Simpan, refresh browser. Kalau tiga-tiganya berubah, berarti lo udah bisa baca kode Blade. Itu doang targetnya, belum perlu ngerti semuanya.</p>
 </section><section id="trek-0-bab-12" class="bab"><h2><span class="bab-num">12</span><span>Menu navigasi</span></h2>
-<p>Breeze udah bikin navbar di <code>resources/views/layouts/navigation.blade.php</code>. Buka file itu, cari bagian <code>&lt;x-nav-link&gt;</code> yang isinya Dashboard.</p>
-<p>Ini contoh <strong>satu</strong> menu, cuma ini yang dikasih:</p>
+<p>Semua yang di bab ini ada di satu file: <code>resources/views/layouts/navigation.blade.php</code>.</p>
+<h3>Benerin bug bawaan Breeze dulu</h3>
+<p>Halaman daftar laporan kita sengaja bisa dibuka tanpa login. Masalahnya navbar Breeze nganggep semua pengunjung udah login, jadi dia manggil <code>Auth::user()-&gt;name</code>. Kalau belum login, isinya kosong, dan muncul error <code>Attempt to read property "name" on null</code>.</p>
+<p>Buka file navigasi, cari komentar <code>&lt;!-- Settings Dropdown --&gt;</code>, biasanya sekitar baris 26. Tulis <code>@auth</code> <strong>satu baris di atas</strong> komentar itu.</p>
+<p>Terus cari <code>&lt;/div&gt;</code> penutupnya, sekitar 25 baris di bawah, tepat sebelum komentar <code>&lt;!-- Hamburger --&gt;</code>. Tulis ini persis di bawah <code>&lt;/div&gt;</code> tadi:</p>
+<div class="codeblock"><span class="codelang">xml</span><pre><code class="language-xml">@else
+    &lt;div class="hidden space-x-4 sm:flex sm:items-center sm:ms-6"&gt;
+        &lt;a href="{{ route('login') }}" class="text-sm text-gray-600"&gt;Masuk&lt;/a&gt;
+        &lt;a href="{{ route('register') }}" class="text-sm text-gray-600"&gt;Daftar&lt;/a&gt;
+    &lt;/div&gt;
+@endauth
+</code></pre></div>
+<p>Hasil akhirnya bentuknya kayak gini. Yang di tengah biarin apa adanya, jangan disentuh:</p>
+<div class="codeblock"><span class="codelang">xml</span><pre><code class="language-xml">@auth
+    &lt;!-- Settings Dropdown --&gt;
+    &lt;div class="hidden sm:flex sm:items-center sm:ms-6"&gt;
+        ...isi bawaan Breeze, nggak usah diapa-apain...
+    &lt;/div&gt;
+@else
+    ...dua tombol Masuk dan Daftar tadi...
+@endauth
+</code></pre></div>
+<p>Scroll lagi ke bawah, cari komentar <code>&lt;!-- Responsive Settings Options --&gt;</code>. Blok itu juga manggil <code>Auth::user()</code>, jadi bakal error yang sama pas dibuka di HP. Tulis <code>@auth</code> di atasnya dan <code>@endauth</code> di bawah <code>&lt;/div&gt;</code> penutupnya. Yang ini nggak usah pakai <code>@else</code>.</p>
+<blockquote class="note">
+<p><code>@auth</code> artinya "kerjain bagian ini cuma kalau user udah login". <code>@else</code> di antara <code>@auth</code> dan <code>@endauth</code> artinya "kalau belum login, kerjain yang ini". Cara mastiin lo nutup di tempat yang bener: klik tag <code>&lt;div&gt;</code> pembukanya di VS Code, dia otomatis nyorot pasangan penutupnya.</p>
+</blockquote>
+<p>Simpan, refresh browser. Errornya hilang.</p>
+<h3>Nambah menu</h3>
+<p>Masih di file yang sama, cari <code>&lt;x-nav-link&gt;</code> yang isinya Dashboard. Ganti seluruh blok itu jadi:</p>
 <div class="codeblock"><span class="codelang">xml</span><pre><code class="language-xml">&lt;x-nav-link :href="route('laporan.index')" :active="request()-&gt;routeIs('laporan.index')"&gt;
     Semua Laporan
 &lt;/x-nav-link&gt;
-</code></pre></div>
-<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - tambahin sendiri di file yang sama:</p><ul>
-<li>Menu "Buat Laporan" yang ngarah ke <code>route('laporan.create')</code></li>
-<li>Salin dua menu tadi ke bagian bawah file, yang pakai tag <code>&lt;x-responsive-nav-link&gt;</code>. Breeze punya dua navbar: satu buat layar lebar, satu buat HP. Kalau cuma isi yang atas, di HP menunya nggak muncul.</li>
-</ul></div>
 
+@auth
+    &lt;x-nav-link :href="route('laporan.create')" :active="request()-&gt;routeIs('laporan.create')"&gt;
+        Buat Laporan
+    &lt;/x-nav-link&gt;
+@endauth
+</code></pre></div>
+<p>Menu "Buat Laporan" dibungkus <code>@auth</code> soalnya route-nya butuh login. Kalau nggak dibungkus, pengunjung yang belum login bakal ngeklik terus kelempar ke halaman login, bingung.</p>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - navbar Breeze ada dua: satu buat layar lebar, satu buat HP. Yang barusan lo isi itu yang layar lebar. Sekarang isi yang buat HP:</p><ol>
+<li>Scroll ke bawah, cari komentar <code>&lt;!-- Responsive Navigation Menu --&gt;</code></li>
+<li>Di situ ada <code>&lt;x-responsive-nav-link&gt;</code> yang isinya Dashboard</li>
+<li>Salin dua menu yang barusan lo bikin, tempel gantiin blok Dashboard itu</li>
+<li>Ganti tulisan <code>x-nav-link</code> jadi <code>x-responsive-nav-link</code>. Ada 4 tempat: 2 tag pembuka, 2 tag penutup</li>
+<li>Simpan, terus kecilin lebar window browser sampai menunya berubah jadi ikon garis tiga. Klik ikonnya</li>
+</ol></div>
+
+<p>Dua menu tadi muncul? Selesai.</p>
 </section><section id="trek-0-bab-13" class="bab"><h2><span class="bab-num">13</span><span>Kalau error</span></h2>
 <p>Baca <strong>baris pertama</strong> pesan error, bukan tumpukan panjang di bawahnya. Hampir semua error pemula ada di tabel ini.</p>
 <table>
@@ -857,9 +993,10 @@ Route::middleware('auth')-&gt;group(function () {
 <li class="check"><input type="checkbox"/><span>Upload foto berhasil, filenya kelihatan di storage/app/public/items</span></li>
 <li class="check"><input type="checkbox"/><span>Daftar laporan muncul lengkap sama fotonya</span></li>
 <li class="check"><input type="checkbox"/><span>Filter jenis dan pencarian nama barang jalan</span></li>
-<li class="check"><input type="checkbox"/><span>Halaman detail dibikin sendiri</span></li>
-<li class="check"><input type="checkbox"/><span>Hapus laporan jalan, dan fotonya ikut kehapus</span></li>
-<li class="check"><input type="checkbox"/><span>Menu navigasi lengkap, desktop dan HP</span></li>
+<li class="check"><input type="checkbox"/><span>Halaman detail muncul, dan 3 ubahan latihannya kelar</span></li>
+<li class="check"><input type="checkbox"/><span>Navbar udah dibungkus @auth, halaman daftar bisa dibuka tanpa login</span></li>
+<li class="check"><input type="checkbox"/><span>Hapus laporan jalan</span></li>
+<li class="check"><input type="checkbox"/><span>Menu navigasi muncul di layar lebar dan di HP</span></li>
 </ul>
 <p>Kelar semua? Lanjut Level 2.</p>
 </section><footer><span>Bagian ini selesai.</span><span>Juli 2026</span></footer></div><div class="panel" data-track="trek-1"><div class="hero"><span class="eyebrow">Level 2 · Lanjutan</span><h2>Sistemnya jadi kepakai</h2><p>Seeder, banyak foto per laporan, role petugas, middleware, dan alur klaim sampai barang balik ke pemiliknya.</p></div><section id="trek-1-bab-01" class="bab"><h2><span class="bab-num">01</span><span>Apa yang ditambahin</span></h2>
@@ -903,7 +1040,33 @@ Route::middleware('auth')-&gt;group(function () {
 <blockquote class="note">
 <p><code>migrate:fresh</code> ngehapus <strong>semua</strong> tabel terus bikin ulang dari nol. Jangan pernah jalanin ini di server produksi. Data hilang total, nggak ada undo. Foto yang udah keupload juga jadi yatim: filenya masih ada di folder, tapi nggak ada datanya di database.</p>
 </blockquote>
-<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - bikin sendiri model <code>Category</code>. Isinya: <code>$fillable</code>, cast <code>is_active</code> jadi boolean, relasi <code>itemReports()</code> pakai <code>hasMany</code>, dan method <code>getRouteKeyName()</code> yang return <code>'slug'</code>.</p></div>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - bikin file <code>app/Models/Category.php</code>. Salin ini dulu, udah hampir jadi:</p></div>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">&lt;?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Category extends Model
+{
+    protected $fillable = ['name', 'slug', 'is_active'];
+
+    protected function casts(): array
+    {
+        return ['is_active' =&gt; 'boolean'];
+    }
+
+    // TUGAS: bikin relasi ke ItemReport di sini
+}
+</code></pre></div>
+<p>Tugasnya cuma satu: ganti baris <code>// TUGAS</code> jadi method relasi. Contekannya ada di model <code>ItemReport</code>, bagian <code>user()</code>. Tiga hal yang beda:</p>
+<ul>
+<li>Nama methodnya <code>itemReports</code>, jamak, soalnya satu kategori punya banyak laporan</li>
+<li>Tipe kembaliannya <code>HasMany</code>, bukan <code>BelongsTo</code></li>
+<li>Isinya <code>return $this-&gt;hasMany(ItemReport::class);</code></li>
+</ul>
+<p>Kalau bingung, buka lagi bab 6 di Level 1 dan bandingin dua-duanya baris per baris.</p>
 <p>Update juga model <code>ItemReport</code>: ganti <code>'category'</code> di <code>$fillable</code> jadi <code>'category_id'</code>, lalu tambahin relasi:</p>
 <div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">public function category(): BelongsTo
 {
@@ -939,7 +1102,21 @@ class CategorySeeder extends Seeder
 <div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">$this-&gt;call(CategorySeeder::class);
 </code></pre></div>
 <p>Jalanin <code>php artisan db:seed</code>, atau sekalian reset plus isi: <code>php artisan migrate:fresh --seed</code>.</p>
-<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - pindahin semua kategori dari <code>config/items.php</code> ke seeder ini, minimal 10. Terus di <code>DatabaseSeeder</code>, bikin juga 2 user dummy pakai <code>User::create()</code>.</p></div>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - dua hal, dua-duanya tinggal salin dan ganti tulisan.</p></div>
+<p><strong>Satu.</strong> Pindahin semua kategori dari <code>config/items.php</code> ke seeder. Di seeder cuma nama yang dipakai, slug-nya dibikin otomatis. Jadi tinggal tambahin ke dalam kurung siku:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">$names = ['Elektronik', 'Dompet dan Tas', 'Kartu dan Dokumen', 'Kunci'];
+</code></pre></div>
+<p>Lanjutin sampai semua kategori masuk, minimal 10. Pisah pakai koma, tiap nama diapit tanda kutip.</p>
+<p><strong>Dua.</strong> Bikin user dummy. Buka <code>database/seeders/DatabaseSeeder.php</code>, tempel ini di dalam <code>run()</code>:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">\App\Models\User::create([
+    'name' =&gt; 'Petugas Pos',
+    'email' =&gt; 'petugas@kampus.test',
+    'password' =&gt; bcrypt('password'),
+    'role' =&gt; 'petugas',
+]);
+</code></pre></div>
+<p>Salin lagi blok itu buat bikin user kedua, ganti nama, email, dan <code>role</code>-nya jadi <code>pelapor</code>.</p>
+<p>Jalanin <code>php artisan migrate:fresh --seed</code>, terus coba login pakai email dan password <code>password</code>.</p>
 </section><section id="trek-1-bab-04" class="bab"><h2><span class="bab-num">04</span><span>Banyak foto per laporan</span></h2>
 <p>Satu foto sering nggak cukup. Dompet perlu difoto luar dan dalam. Ini butuh tabel terpisah, karena satu laporan bisa punya banyak foto.</p>
 <div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan make:model ItemPhoto -m
@@ -978,7 +1155,20 @@ foreach ($request-&gt;file('photos', []) as $photo) {
 <blockquote class="note">
 <p>Hati-hati: <code>cascadeOnDelete</code> cuma ngehapus baris database, <strong>file fotonya tetep nyangkut di folder</strong>. Buat ngehapus filenya beneran, lo harus loop dulu sebelum ngehapus laporannya, atau pakai model event <code>deleting</code>.</p>
 </blockquote>
-<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - update <code>destroy()</code> di controller biar semua file foto ikut kehapus dari storage sebelum laporannya dihapus. Terus di halaman detail, ganti satu gambar jadi galeri: foto pertama gede, sisanya kecil di bawahnya.</p></div>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - bikin file fotonya ikut kehapus beneran.</p></div>
+<p>Buka <code>ItemReportController</code>, cari method <code>destroy()</code>. Tempel tiga baris ini tepat <strong>sebelum</strong> baris <code>$laporan-&gt;delete();</code>:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">foreach ($laporan-&gt;photos as $photo) {
+    Storage::disk('public')-&gt;delete($photo-&gt;path);
+}
+</code></pre></div>
+<p>Cara ngetesnya:</p>
+<ol>
+<li>Bikin laporan baru pakai 2 foto</li>
+<li>Buka folder <code>storage/app/public/items</code>, hitung ada berapa file</li>
+<li>Hapus laporannya lewat web</li>
+<li>Buka folder itu lagi, dua file tadi harus udah hilang</li>
+</ol>
+<p>Kalau filenya masih ada, berarti kodenya ketaro di bawah <code>$laporan-&gt;delete()</code>. Pindahin ke atasnya. Urutan penting: begitu laporannya kehapus, daftar fotonya ikut hilang dan lo nggak tau lagi file mana yang harus dihapus.</p>
 </section><section id="trek-1-bab-05" class="bab"><h2><span class="bab-num">05</span><span>Role user</span></h2>
 <p>Sekarang semua user statusnya sama. Kita butuh pembeda: pelapor biasa dan petugas.</p>
 <div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan make:migration add_role_to_users_table
@@ -1070,12 +1260,35 @@ class EnsureUserIsPetugas
 }
 </code></pre></div>
 <p>Dua baris <code>abort</code> di atas itu yang bikin sistemnya nggak gampang disalahgunakan: cuma laporan temuan yang masih terbuka yang bisa diklaim, dan orang nggak bisa ngeklaim laporannya sendiri.</p>
-<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - bikin sendiri:</p><ul>
-<li>Relasi <code>claims()</code> di model <code>ItemReport</code></li>
-<li>Route POST buat klaim, taro di dalam <code>middleware('auth')</code></li>
-<li>Form klaim di halaman detail, muncul cuma kalau laporannya jenis temuan dan statusnya masih <code>open</code></li>
-</ul></div>
-
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - tiga potongan, semuanya udah dikasih. Tugas lo cuma naro di tempat yang bener.</p></div>
+<p><strong>Satu.</strong> Tempel di model <code>ItemReport</code>, di bawah method <code>photos()</code>:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">public function claims(): \Illuminate\Database\Eloquent\Relations\HasMany
+{
+    return $this-&gt;hasMany(Claim::class);
+}
+</code></pre></div>
+<p><strong>Dua.</strong> Tempel di <code>routes/web.php</code>, di dalam blok <code>Route::middleware('auth')</code>:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">Route::post('/laporan/{report}/klaim', [ClaimController::class, 'store'])-&gt;name('klaim.store');
+</code></pre></div>
+<p>Tambahin juga <code>use App\Http\Controllers\ClaimController;</code> di baris paling atas file, sejajar sama <code>use</code> yang lain.</p>
+<p><strong>Tiga.</strong> Tempel di <code>pages/laporan/show.blade.php</code>, tepat sebelum <code>&lt;div class="mt-8 flex items-center justify-between"&gt;</code>:</p>
+<div class="codeblock"><span class="codelang">xml</span><pre><code class="language-xml">@auth
+    @if ($report-&gt;report_type === 'ditemukan' &amp;&amp; $report-&gt;status === 'open')
+        &lt;form method="POST" action="{{ route('klaim.store', $report) }}"
+              enctype="multipart/form-data" class="mt-8 border-t pt-6"&gt;
+            @csrf
+            &lt;h4 class="font-semibold text-gray-800"&gt;Ini Barang Saya&lt;/h4&gt;
+            &lt;textarea name="proof_description" rows="3" class="mt-2 block w-full rounded-md border-gray-300"
+                placeholder="Sebutkan ciri yang cuma diketahui pemiliknya"&gt;&lt;/textarea&gt;
+            &lt;x-input-error :messages="$errors-&gt;get('proof_description')" class="mt-2" /&gt;
+            &lt;input name="proof" type="file" accept="image/*" class="mt-3 block w-full text-sm" /&gt;
+            &lt;x-primary-button class="mt-3"&gt;Ajukan Klaim&lt;/x-primary-button&gt;
+        &lt;/form&gt;
+    @endif
+@endauth
+</code></pre></div>
+<p>Tes: login pakai akun lain, buka laporan jenis temuan, formnya harus muncul. Buka laporan punya lo sendiri, formnya tetep muncul tapi begitu dikirim bakal ditolak sama <code>abort_if</code> di controller. Itu bener.</p>
+<p>Kalau mau formnya nggak usah muncul sekalian di laporan sendiri, tambahin <code>&amp;&amp; auth()-&gt;id() !== $report-&gt;user_id</code> di dalam <code>@if</code>.</p>
 </section><section id="trek-1-bab-08" class="bab"><h2><span class="bab-num">08</span><span>Halaman petugas</span></h2>
 <div class="codeblock"><span class="codelang">bash</span><pre><code class="language-bash">php artisan make:controller Petugas/ClaimReviewController
 </code></pre></div>
@@ -1130,18 +1343,32 @@ Route::middleware(['auth', 'petugas'])-&gt;prefix('petugas')-&gt;name('petugas.'
     Route::patch('klaim/{claim}/approve', [ClaimReviewController::class, 'approve'])-&gt;name('klaim.approve');
 });
 </code></pre></div>
-<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - bikin sendiri:</p><ul>
-<li>Method <code>reject()</code>: wajib validasi <code>officer_note</code> minimal 5 karakter, status klaim jadi <code>rejected</code>, dan status laporannya <strong>jangan</strong> diubah</li>
-<li>View <code>pages/petugas/klaim/index.blade.php</code>: tabel berisi nama pengklaim, nama barang, bukti tulisan, thumbnail bukti foto, plus tombol Setujui dan Tolak</li>
-<li>Menu "Verifikasi Klaim" di navbar, dibungkus <code>@if (auth()-&gt;user()-&gt;isPetugas())</code> biar pelapor biasa nggak lihat</li>
-</ul></div>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - bikin method <code>reject()</code>. Salin kerangka ini ke <code>ClaimReviewController</code>, di bawah <code>approve()</code>:</p></div>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">public function reject(Request $request, Claim $claim): RedirectResponse
+{
+    $data = $request-&gt;validate([
+        'officer_note' =&gt; ['required', 'string', 'min:5'],
+    ]);
 
-<p>Contoh bentuk tombol setujui, buat contekan form method PATCH:</p>
+    // TUGAS: ubah status klaim jadi 'rejected' dan simpan officer_note
+
+    return back()-&gt;with('success', 'Klaim ditolak.');
+}
+</code></pre></div>
+<p>Ganti baris <code>// TUGAS</code> jadi satu baris. Contekannya ada di <code>approve()</code> persis di atasnya, yang barisnya <code>$claim-&gt;update([...])</code>. Bedanya cuma statusnya <code>rejected</code>, dan alasannya diambil dari <code>$data['officer_note']</code>.</p>
+<p>Yang <strong>nggak boleh</strong> lo tulis di sini: baris yang ngubah <code>$claim-&gt;itemReport</code>. Klaim ditolak bukan berarti barangnya udah balik, jadi status laporannya harus tetep <code>open</code> biar orang lain masih bisa ngeklaim.</p>
+<p>Habis itu daftarin route-nya, tempel di grup petugas:</p>
+<div class="codeblock"><span class="codelang">php</span><pre><code class="language-php">Route::patch('klaim/{claim}/reject', [ClaimReviewController::class, 'reject'])-&gt;name('klaim.reject');
+</code></pre></div>
+<p>Buat view <code>pages/petugas/klaim/index.blade.php</code>, jangan bikin dari nol. Salin <code>pages/laporan/index.blade.php</code>, terus ganti isinya jadi tabel biasa. Bentuk tombolnya kayak gini:</p>
 <div class="codeblock"><span class="codelang">xml</span><pre><code class="language-xml">&lt;form method="POST" action="{{ route('petugas.klaim.approve', $claim) }}"&gt;
     @csrf
     @method('PATCH')
     &lt;x-primary-button&gt;Setujui&lt;/x-primary-button&gt;
 &lt;/form&gt;
+</code></pre></div>
+<p>Buat tombol Tolak, salin form di atas, ganti <code>approve</code> jadi <code>reject</code>, terus tambahin satu input di dalamnya:</p>
+<div class="codeblock"><span class="codelang">xml</span><pre><code class="language-xml">&lt;input name="officer_note" placeholder="Alasan penolakan" class="rounded-md border-gray-300 text-sm" /&gt;
 </code></pre></div>
 </section><section id="trek-1-bab-09" class="bab"><h2><span class="bab-num">09</span><span>Checklist Level 2</span></h2>
 <ul>
@@ -1150,7 +1377,6 @@ Route::middleware(['auth', 'petugas'])-&gt;prefix('petugas')-&gt;name('petugas.'
 <li class="check"><input type="checkbox"/><span>Seeder isi minimal 10 kategori</span></li>
 <li class="check"><input type="checkbox"/><span>Tabel item_photos, upload banyak foto jalan</span></li>
 <li class="check"><input type="checkbox"/><span>Hapus laporan ikut ngehapus semua file fotonya</span></li>
-<li class="check"><input type="checkbox"/><span>Galeri foto di halaman detail</span></li>
 <li class="check"><input type="checkbox"/><span>Kolom role dan phone di tabel users</span></li>
 <li class="check"><input type="checkbox"/><span>Middleware petugas jalan, pelapor biasa dapet 403</span></li>
 <li class="check"><input type="checkbox"/><span>Tabel claims + form klaim di halaman detail</span></li>
@@ -1293,7 +1519,33 @@ php artisan storage:link
 npm run dev
 </code></pre></div>
 <p>Perhatiin ada <code>php artisan storage:link</code> di situ. Ini wajib dan gampang kelupaan, soalnya pintu tembus foto tadi memang sengaja nggak ikut di-push. Lupa jalanin ini, semua foto di web bakal jadi ikon gambar rusak.</p>
-<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - bikin file <code>README.md</code> di root project, isinya: nama project, apa fungsinya, dan tujuh perintah di atas sebagai langkah instalasi. File ini yang pertama dilihat orang waktu buka repo lo.</p></div></section><footer><span>Bagian ini selesai.</span><span>Juli 2026</span></footer></div></main>
+<div class="latihan"><span class="latihan-stamp">LATIHAN</span><p> - bikin file <code>README.md</code> di folder paling luar project. Salin ini, ganti bagian yang di dalam kurung siku:</p></div>
+<div class="codeblock"><span class="codelang">plaintext</span><pre><code class="language-plaintext"># Lost and Found Kampus
+
+Website buat lapor barang hilang dan barang temuan di [nama sekolah atau kampus lo].
+Dibikin pakai Laravel.
+
+## Cara Menjalankan
+
+1. Clone repo ini
+2. Jalankan perintah berikut satu per satu:
+
+   composer install
+   npm install
+   cp .env.example .env
+   php artisan key:generate
+   php artisan migrate --seed
+   php artisan storage:link
+   npm run dev
+
+3. Buka terminal baru, jalankan php artisan serve
+4. Buka http://127.0.0.1:8000
+
+## Dibuat Oleh
+
+[nama lo]
+</code></pre></div>
+<p>File ini yang pertama dilihat orang waktu buka repo lo di GitHub. Habis dibikin, <code>git add .</code>, <code>git commit -m "Tambah README"</code>, <code>git push</code>.</p></section><footer><span>Bagian ini selesai.</span><span>Juli 2026</span></footer></div></main>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
